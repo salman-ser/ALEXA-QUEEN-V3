@@ -10,16 +10,22 @@
     "description": "Name of your bot(enter)the name of your bot here"
     "required": false,
     "value": "𝐀𝐋𝐄𝐗𝐀 𝐐𝐔𝐄𝐄𝐍"
+
+
     },
     "PREFIX": {
       "description": "Prefix of your bot(enter)the prefix of your bot here"
-      "required": false,
-      "value": "ʕ•ᴥ•ʔ"
+      "required": true,
+      "value": "."
+
+
     },
     "MODS": {
       "description": "The phone numbers of the users who you want to be admin for the bot (should be in international format without + and multiple numbers must be separated by a comma \",\")",
       "required": false,
       "value": "27686881509"
+
+
     },
     "MONGODB": {
       "description": "A secret String for Mongodb Connection.(Required)"
