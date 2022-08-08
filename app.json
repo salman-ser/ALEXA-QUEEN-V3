@@ -8,7 +8,7 @@
   "env": {
     "NAME": {
     "description": "Name of your bot(enter)the name of your bot here"
-    "required": fake,
+    "required": false,
     "value": "𝐀𝐋𝐄𝐗𝐀 𝐐𝐔𝐄𝐄𝐍"
     },
     "PREFIX": {
