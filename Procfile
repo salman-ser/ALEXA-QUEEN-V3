@@ -1,1 +1,1 @@
-web: pm2 start heart.js --deep-monitoring --attach
+web: pm2 start index.js --deep-monitoring --attach
