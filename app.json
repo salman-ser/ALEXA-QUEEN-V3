@@ -1,23 +1,30 @@
 {
-  "name": "Mizuhara~Arus",
-  "description": "whatsapp multi device bot build with nodejs on baileys",
-  "repository": "https://github.com/Arus-Bots/Mizuhara/",
-  "logo": "
+  "name": "ALEXA QUEEN",
+  "description": "alexa queen powered by cyberxkid",
+  "repository": "https://github.com/Diegoson/ALEXA-QUEEN-V3/",
+  "logo": "https://i.ibb.co/TPLgRdk/Alexa.jpg/Alexaqueen.png?v=4",
   "keywords": ["nodejs", "bot", "whatsapp bot", "whatsapp automation", "multi device"],
    "success_url": "/",
   "env": {
     "NAME": {
-    "description": "Name of your bot"
+    "description": "Name of your bot(enter)the name of your bot here"
+    "required": fake,
+    "value": "𝐀𝐋𝐄𝐗𝐀 𝐐𝐔𝐄𝐄𝐍"
     },
     "PREFIX": {
-      "description": "Prefix of your bot"
+      "description": "Prefix of your bot(enter)the prefix of your bot here"
+      "required": false,
+      "value": "ʕ•ᴥ•ʔ"
     },
     "MODS": {
       "description": "The phone numbers of the users who you want to be admin for the bot (should be in international format without + and multiple numbers must be separated by a comma \",\")",
-      "required": false
+      "required": false,
+      "value": "27686881509"
     },
     "MONGODB": {
       "description": "A secret String for Mongodb Connection.(Required)"
+      "required": false,
+      "value" ""
     }
   },
   "buildpacks": [
