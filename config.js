@@ -22,7 +22,7 @@ global.port = process.env.PORT || 8080;
 (global.packname = process.env.PACKNAME || "kaguya"),
   (global.prefix = process.env.PREFIX || "-"),
   (global.author = process.env.AUTHOR || "CYBERXKID"),
-  (global.sessionName = "arus"),
+  (global.sessionName = "alexa"),
   (global.name = process.env.NAME || "ALEXA QUEEN"),
   (global.thumb = fs.readFileSync("./trash/info.jpeg"));
 
