@@ -7,9 +7,6 @@
   <img border-radius: 15px src="https://i.ibb.co/TPLgRdk/Alexa.jpg/Alexaqueen.png" width="300" height="300"/>
   <p align="center">
 
-# <a href="https://chat.whatsapp.com/BgFiKPSLFsp54TMqoGH0oV"><img src="https://img.shields.io/badge/Join Alexa-25D366?style=for-the-badge&logo=whatsapp&logoColor=white"/>[![JavaScript](https://img.shields.io/badge/JavaScript-FFFF00?style=for-the-badge&logo=javascript&logoColor=black)](https://js.org/)[![NodeJs](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
-
-
 ## ```Connect With Me```
 <p align="center">
 <a href="https://wa.me/27686881509"><img src="https://img.shields.io/badge/Contact Hell Boy-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
