@@ -733,7 +733,7 @@ if (!isBotAdmins) return m.reply("âŒ Cannot execute without being admin")
                             let mention = mentionByTag
       let users = await (mention[0]) || m.msg.contextInfo.participant
 	  if (!users) return m.reply("âŒ Couldn't find any userID in context")
-        await arus.groupParticipantsUpdate(m.chat, [users], 'promote')
+        await alexa.groupParticipantsUpdate(m.chat, [users], 'promote')
          alexa.sendMessage(m.chat,{text:`woh woh!! looks like someone promoted @${users.split("@")[0]}`,contextInfo: { mentionedJid: [users] }})
 		 			} catch {
 		return m.reply("âŒ Please tag the user you want to make admin")
@@ -748,7 +748,7 @@ if (!isBotAdmins) return m.reply("âŒ Cannot execute without being admin")
                             let mention = mentionByTag
       let users = await (mention[0]) || m.msg.contextInfo.participant
 	  if (!users) return m.reply("âŒ Couldn't find any userID in context")
-        await arus.groupParticipantsUpdate(m.chat, [users], 'demote')
+        await alexa.groupParticipantsUpdate(m.chat, [users], 'demote')
         alexa.sendMessage(m.chat,{text:`OOPs!! looks like someone demoted @${users.split("@")[0]}`,contextInfo: { mentionedJid: [users] }})
 					} catch {
 return m.reply("âŒ Please tag the user you want to demote")
@@ -1311,7 +1311,7 @@ const reply = `
 *ðŸ§‘ðŸ»â€ðŸŽ¤ reels:* ${fids.data.reels}
 *ðŸ“– Bio:* ${fids.data.biography}
               `
-alexa,.sendMessage(m.chat, {image: { url: fids.data.profile_pic }, caption:reply}, {quoted:m})
+alexa.sendMessage(m.chat, {image: { url: fids.data.profile_pic }, caption:reply}, {quoted:m})
 } catch (err) {
 console.log(err)
 return m.reply (`Please give me valid insagram ID.`)
@@ -1663,7 +1663,7 @@ console.log(recp)
 break
  case 'waifu': {
                let waifud = await axios.get('https://waifu.pics/api/sfw/waifu')
- arus.sendMessage(m.chat, { image: { url: waifud.data.url }, caption: "Here you go" }, { quoted: m })
+ alexa.sendMessage(m.chat, { image: { url: waifud.data.url }, caption: "Here you go" }, { quoted: m })
  }
                 break  
  case 'couplepp': case 'ppcouple': {
@@ -1678,7 +1678,7 @@ break
 
 case 'neko':{
    waifud = await axios.get('https://waifu.pics/api/sfw/neko')
- arus.sendMessage(m.chat, { image: { url: waifud.data.url }, caption: "Here you go" }, { quoted: m })
+ alexa.sendMessage(m.chat, { image: { url: waifud.data.url }, caption: "Here you go" }, { quoted: m })
  }             
                 break                                
 case 'anime':
