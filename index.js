@@ -29,21 +29,21 @@ console.log(color(figlet.textSync('ALEXA V3', {
 		whitespaceBreak: true
         }), 'yellow'))
 console.log(color('\n🙂 YT CHANNEL: no yt ','silver'))
-console.log(color('🙂 GITHUB: TOXIC-KICHU ','silver'))
-console.log(color('🙂 WA NUMBER: +918075379950 ','silver'))
-console.log(color('  Liza Mwol Bot Inc. 2022','mediumseagreen'))
+console.log(color('🙂 GITHUB: Diegoson ','silver'))
+console.log(color('🙂 WA NUMBER: +27686881509 ','silver'))
+console.log(color('  Alexa Queen Bot Inc. 2022','mediumseagreen'))
     console.log(color('🙂','red'), color('I Wrote This Script By Myself!', 'yellow'))
     console.log(color('🙂','red'), color('Source Code Version: 3.0', 'aqua'))
     console.log(color('🙂','red'), color('Bug? Error? Suggestion? Talk to developer:', 'aqua'))
-    console.log(color('🙂', 'cyan'), color('https://wa.me/918075379950'))
-    console.log(color('🙂', 'cyan'), color('Liza Mwol MD Is Online...', 'pink'))
+    console.log(color('🙂', 'cyan'), color('https://wa.me/27686881509'))
+    console.log(color('🙂', 'cyan'), color('Alexa Queen MD Is Online...', 'pink'))
     console.log(color('🙂', 'cyan'), color('Welcome Back Owner! Hope You Doing Well~', 'magenta'))
-    console.log(color('🙂','red'), color('Thanks For Using Liza Mwol MD', 'white'))
+    console.log(color('🙂','red'), color('Thanks For Using Alexa Queen MD', 'white'))
     let { version, isLatest } = await fetchLatestBaileysVersion()
     const Alexa = AlexaConnect({
         logger: pino({ level: 'silent' }),
         printQRInTerminal: true,
-        browser: ['Subscribe Liza','Safari','1.0.0'],
+        browser: ['Subscribe Alexa','Safari','1.0.0'],
         auth: state,
         version
     })
