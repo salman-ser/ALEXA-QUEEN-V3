@@ -10,7 +10,7 @@
 ## ```Connect With Me```
 <p align="center">
 <a href="https://wa.me/27686881509"><img src="https://img.shields.io/badge/𝐂𝐎𝐍𝐓𝐀𝐂𝐓 𝐂𝐘𝐁𝐄𝐑𝐊𝐈𝐃-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
-<a href="https://chat.whatsapp.com/BgFiKPSLFsp54TMqoGH0oV"><img src="https://img.shields.io/badge/𝐉𝐎𝐈𝐍 𝐀𝐋𝐄𝐗𝐀 𝐆𝐂-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
+<a href="https://chat.whatsapp.com/BgFiKPSLFsp54TMqoGH0oV"><img src="https://img.shields.io/badge/𝐉𝐎𝐈𝐍 𝐀𝐋𝐄𝐗𝐀-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
 </p>
 
 [![](https://raw.githubusercontent.com/ZeroTwoInc/Media/main/logo/UPPER.png)](https://alexa-queen-v3.diegoson.repl.co/)
