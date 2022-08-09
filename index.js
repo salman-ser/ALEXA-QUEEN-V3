@@ -26,11 +26,11 @@ async function main() {
 }
 
 try {
-    fs.unlinkSync(`./${sessionName}.json`);
+    fs.readFileSync(`./session.json`);
 } catch (err) {
     console.log("Auth File Already Deleted");
 }
-const { state, saveState } = useSingleFileAuthState(`./${sessionName}.json`)
+const { state, saveState } = useSingleFileAuthState(`./session.json`)
 
 //--------------------------------AUTH-FETCH------------------------------------//
 let cred, auth_row_count;
