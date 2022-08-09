@@ -672,7 +672,7 @@ case 'pinterest':{
 	try {
 		let result = await hxz.pinterest(ter)
 				let rando =  result[Math.floor(Math.random() * result.length)]			
-    arus.sendMessage(m.chat,{image:{url: rando},caption:"here you go"},{quoted:m,})
+    alexa.sendMessage(m.chat,{image:{url: rando},caption:"here you go"},{quoted:m,})
 	} catch {
 		m.reply('')
 	}
@@ -832,7 +832,7 @@ case 'linkgroup': case 'invitelink': {
 				if (hh == 'false') return m.reply("âŒ *Invite* is not active in this group")
                 let response = await alexa.groupInviteCode(m.chat)
          //   m.reply('Has been sent to you in peronal message')
-         await arus.sendText(m.chat, `https://chat.whatsapp.com/${response}\n\nLink Group : ${groupMetadata.subject}`, m, { detectLink: true })
+         await alexa.sendText(m.chat, `https://chat.whatsapp.com/${response}\n\nLink Group : ${groupMetadata.subject}`, m, { detectLink: true })
             }
  break
   case 'delete': case 'del': {
