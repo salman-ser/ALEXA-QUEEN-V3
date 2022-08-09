@@ -1,4 +1,5 @@
 
+
 <h1 align="center">❏ᴀʟᴇxᴀ ǫᴜᴇᴇɴ ᴠ3❐<br></h1>
 <p align="center">
 
@@ -6,7 +7,7 @@
   <img border-radius: 15px src="https://i.ibb.co/TPLgRdk/Alexa.jpg/Alexaqueen.png" width="300" height="300"/>
   <p align="center">
 
-# [![WhatsApp Group](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/LN4mY3laHz61S1ybxHBeYd)[![JavaScript](https://img.shields.io/badge/JavaScript-FFFF00?style=for-the-badge&logo=javascript&logoColor=black)](https://js.org/) [![NodeJs](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
+# [![WhatsApp Group](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/LN4mY3laHz61S1ybxHBeYd) [![JavaScript](https://img.shields.io/badge/JavaScript-FFFF00?style=for-the-badge&logo=javascript&logoColor=black)](https://js.org/) [![NodeJs](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
 
 
 
