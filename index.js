@@ -1,188 +1,121 @@
-require('./config')
-require('./index.js')
-const { default: arusConnect, useSingleFileAuthState, DisconnectReason, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore,MessageRetryMap, jidDecode, proto } = require("@adiwajshing/baileys")
+require("./config.js")
+const { default: AlexaConnect, useSingleFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@adiwajshing/baileys")
+const { state, saveState } = useSingleFileAuthState(`./${sessionName}.json`)
 const pino = require('pino')
 const fs = require('fs')
 const chalk = require('chalk')
-const qrcode = require("qrcode");
-const express = require("express");
-const CFonts = require('cfonts')
 const FileType = require('file-type')
+const path = require('path')
+const CFonts = require('cfonts');
+const { exec, spawn, execSync } = require("child_process")
 const moment = require('moment-timezone')
-const mongoose = require('mongoose');
-const { Pool } = require("pg");
-main().catch(err => console.log(err));
-const proConfig = {
-    connectionString: pgdb,
-    ssl: {
-        rejectUnauthorized: false,
-    },
-};
-
-const pool = new Pool(proConfig);
-
-async function main() {
-    await mongoose.connect(mongodb);
-}
-
-try {
-    fs.readFileSync(`./session.json`);
-} catch (err) {
-    console.log("Auth File Already Deleted");
-}
-const { state, saveState } = useSingleFileAuthState(`./session.json`)
-
-//--------------------------------AUTH-FETCH------------------------------------//
-let cred, auth_row_count;
-async function fetchauth() {
-    try {
-        auth_result = await pool.query("select * from auth;"); //checking auth table
-        console.log("Fetching login data...");
-        auth_row_count = await auth_result.rowCount;
-        let data = auth_result.rows[0];
-        // console.log("data ",data);
-        if (auth_row_count == 0) {
-            console.log("No login data found!");
-        } else {
-            console.log("Login data found!");
-            cred = {
-                creds: {
-                    noiseKey: JSON.parse(data.noisekey),
-                    signedIdentityKey: JSON.parse(data.signedidentitykey),
-                    signedPreKey: JSON.parse(data.signedprekey),
-                    registrationId: Number(data.registrationid),
-                    advSecretKey: data.advsecretkey,
-                    nextPreKeyId: Number(data.nextprekeyid),
-                    firstUnuploadedPreKeyId: Number(data.firstunuploadedprekeyid),
-                    serverHasPreKeys: Boolean(data.serverhasprekeys),
-                    account: JSON.parse(data.account),
-                    me: JSON.parse(data.me),
-                    signalIdentities: JSON.parse(data.signalidentities),
-                    lastAccountSyncTimestamp: 0, // To allow bot to read the messages
-                    // lastAccountSyncTimestamp: Number(data.lastaccountsynctimestampb),
-                    myAppStateKeyId: data.myappstatekeyid,
-                },
-                keys: state.keys,
-            };
-            cred.creds.noiseKey.private = Buffer.from(cred.creds.noiseKey.private);
-            cred.creds.noiseKey.public = Buffer.from(cred.creds.noiseKey.public);
-            cred.creds.signedIdentityKey.private = Buffer.from(
-                cred.creds.signedIdentityKey.private
-            );
-            cred.creds.signedIdentityKey.public = Buffer.from(
-                cred.creds.signedIdentityKey.public
-            );
-            cred.creds.signedPreKey.keyPair.private = Buffer.from(
-                cred.creds.signedPreKey.keyPair.private
-            );
-            cred.creds.signedPreKey.keyPair.public = Buffer.from(
-                cred.creds.signedPreKey.keyPair.public
-            );
-            cred.creds.signedPreKey.signature = Buffer.from(
-                cred.creds.signedPreKey.signature
-            );
-            cred.creds.signalIdentities[0].identifierKey = Buffer.from(
-                cred.creds.signalIdentities[0].identifierKey
-            );
-        }
-    } catch (err) {
-        console.log(err);
-        console.log("Creating database..."); //if login fail create a db
-        await pool.query(
-            "CREATE TABLE auth(noiseKey text, signedIdentityKey text, signedPreKey text, registrationId text, advSecretKey text, nextPreKeyId text, firstUnuploadedPreKeyId text, serverHasPreKeys text, account text, me text, signalIdentities text, lastAccountSyncTimestamp text, myAppStateKeyId text);"
-        );
-
-        await fetchauth();
-    }
-}
-
-
-const user = require("./models/user")
-const group = require("./models/group")
-//const usere = JSON.parse(fs.readFileSync('./lib/user.json'))
-const { smsg, formatp, formatDate, getTime, isUrl, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, GIFBufferToVideoBuffer, getRandom, await, sleep, getSizeMedia, generateMessageTag } = require('./lib/myfunc')
-const Canvas = require('discord-canvas')
-const path = require('path');
 const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
-global.api = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
+const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetchJson, await, sleep } = require('./lib/myfunc')
+const figlet = require('figlet')
+const {
+    color
+} = require('./lib/color')
+//require("http").createServer((_, res) => res.end("Hello World!")).listen(8080)
 
 const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
 
-const getVersionWaweb = () => {
-    let version
-    try {
-        let a = fetchJson('https://web.whatsapp.com/check-update?version=1&platform=web')
-        version = [a.currentVersion.replace(/[.]/g, ', ')]
-    } catch {
-        version = [2, 2204, 13]
-    }
-    return version
-}
-const PORT = port
-const app = express();
-const msgRetryCounterMap=MessageRetryMap
-let QR_GENERATE = "invalid";
 async function startAlexa() {
-    await fetchauth();
-    if (auth_row_count != 0) {
-        state.creds = cred.creds;
-    }
-    CFonts.say('ALEXA\nBY\nCYBERXKID', {
-        font: 'block',
-        align: 'center',
-        gradient: ['blue', 'magenta']
-    })
-    const alexa = alexaConnect({
+console.log(color(figlet.textSync('ALEXA V3', {
+		font: 'Pagga',
+		horizontalLayout: 'default',
+		vertivalLayout: 'default',
+	    width: 80,
+		whitespaceBreak: true
+        }), 'yellow'))
+console.log(color('\n🙂 YT CHANNEL: no yt ','silver'))
+console.log(color('🙂 GITHUB: TOXIC-KICHU ','silver'))
+console.log(color('🙂 WA NUMBER: +918075379950 ','silver'))
+console.log(color('  Liza Mwol Bot Inc. 2022','mediumseagreen'))
+    console.log(color('🙂','red'), color('I Wrote This Script By Myself!', 'yellow'))
+    console.log(color('🙂','red'), color('Source Code Version: 3.0', 'aqua'))
+    console.log(color('🙂','red'), color('Bug? Error? Suggestion? Talk to developer:', 'aqua'))
+    console.log(color('🙂', 'cyan'), color('https://wa.me/918075379950'))
+    console.log(color('🙂', 'cyan'), color('Liza Mwol MD Is Online...', 'pink'))
+    console.log(color('🙂', 'cyan'), color('Welcome Back Owner! Hope You Doing Well~', 'magenta'))
+    console.log(color('🙂','red'), color('Thanks For Using Liza Mwol MD', 'white'))
+    let { version, isLatest } = await fetchLatestBaileysVersion()
+    const Alexa = AlexaConnect({
         logger: pino({ level: 'silent' }),
         printQRInTerminal: true,
-        browser: ['ALEXA MD', 'Firefox', '1.0.1'],
+        browser: ['Subscribe Liza','Safari','1.0.0'],
         auth: state,
-        version: getVersionWaweb() || [2, 2204, 13]
+        version
+    })
+    
+store.bind(Alexa.ev)
+
+    // anticall auto block
+    Alexa.ws.on('CB:call', async (json) => {
+    const callerId = json.content[0].attrs['call-creator']
+    if (json.content[0].tag == 'offer') {
+    let pa7rick = await Alexa.sendContact(callerId, global.owner)
+    Alexa.sendMessage(callerId, { text: `Automatic Block System!\nDon't Call Bot!\nPlease Ask Or Contact The Owner To Unblock You!`}, { quoted : pa7rick })
+    await sleep(8000)
+    await Alexa.updateBlockStatus(callerId, "block")
+    }
     })
 
-
-    store.bind(alexa.ev)
-
-    alexa.ws.on('CB:call', async (json) => {
-        const callerId = json.content[0].attrs['call-creator']
-        if (json.content[0].tag == 'offer') {
-            let pa7rick = await alexa.sendContact(callerId, global.owner)
-            alexa.sendMessage(callerId, { text: `Automatic system block!\nDon't call bot!\nPlease contact owner to open it !` }, { quoted: pa7rick })
-            await sleep(8000)
-            await alexa.updateBlockStatus(callerId, "block")
-        }
+Alexa.ev.on('messages.upsert', async chatUpdate => {
+try {
+mek = chatUpdate.messages[0]
+if (!mek.message) return
+mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
+if (mek.key && mek.key.remoteJid === 'status@broadcast') return
+if (!Alexa.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
+if (mek.key.id.startsWith('BAE5') && mek.key.id.length === 16) return
+m = smsg(Alexa, mek, store)
+require("./liza.js")(Alexa, m, chatUpdate, store)
+} catch (err) {
+console.log(err)
+}
+})
+//GRUP UPDATE
+Alexa.ev.on('groups.update', async pea => {
+       //console.log(pea)
+    // Get Profile Picture Group
+       try {
+       ppgc = await Alexa.profilePictureUrl(pea[0].id, 'image')
+       } catch {
+       ppgc = 'https://i.imgur.com/IWyv8AL.jpeg'
+       }
+       let wm_fatih = { url : ppgc }
+       if (pea[0].announce == true) {
+       Alexa.send5ButImg(pea[0].id, `「 Group Settings Changed 」\n\nThe group has been closed by admin, Now only admin can send messages !`, `${botname}`, wm_fatih, [])
+       } else if(pea[0].announce == false) {
+       Alexa.send5ButImg(pea[0].id, `「 Group Settings Changed 」\n\nThe group has been opened by admin, Now participants can send messages !`, `${botname}`, wm_fatih, [])
+       } else if (pea[0].restrict == true) {
+       Alexa.send5ButImg(pea[0].id, `「 Group Settings Changed 」\n\nGroup info has been restricted, Now only admin can edit group info !`, `${botname}`, wm_fatih, [])
+       } else if (pea[0].restrict == false) {
+       Alexa.send5ButImg(pea[0].id, `「 Group Settings Changed 」\n\nGroup info has been opened, Now participants can edit group info !`, `${botname}`, wm_fatih, [])
+       } else {
+       Alexa.send5ButImg(pea[0].id, `「 Group Settings Changed 」\n\nGroup Subject has been changed to *${pea[0].subject}*`, `${botname}`, wm_fatih, [])
+     }
     })
 
-    alexa.ev.on('messages.upsert', async chatUpdate => {
-        //console.log(JSON.stringify(chatUpdate, undefined, 2))
+//randoming function
+function pickRandom(list) {
+return list[Math.floor(list.length * Math.random())]
+}
+//document randomizer
+let documents = [doc1,doc2,doc3,doc4,doc5,doc6]
+let docs = pickRandom(documents)
+
+Alexa.ev.on('group-participants.update', async (anu) => {
+        console.log(anu)
+        //if (!wlcm.includes(anu.id)) return //remove forwad slashes to make it welcome on off
         try {
-            mek = chatUpdate.messages[0]
-            if (!mek.message) return
-            mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
-            if (mek.key && mek.key.remoteJid === 'status@broadcast') return
-            if (!alexa.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
-            if (mek.key.id.startsWith('BAE5') && mek.key.id.length === 16) return
-            m = smsg(alexa, mek, store)
-            require("./index.js")(alexa, m, chatUpdate, store)
-        } catch (err) {
-            console.log(err)
-        }
-    })
-
-    alexa.ev.on('group-participants.update', async (grp) => {
-        try {
-
-            let metadata = await alexa.groupMetadata(grp.id)
-            let participants = grp.participants
-            let mem = grp.participants[0]
-            const groupName = metadata.subject || ''
-            const groupAdmins = await participants.filter(v => v.admin !== null).map(v => v.id) || ''
-
+            let metadata = await Alexa.groupMetadata(anu.id)
+            let participants = anu.participants
             for (let num of participants) {
                 // Get Profile Picture User
                 try {
-                    ppuser = await alexa.profilePictureUrl(num, 'image')
+                    ppuser = await Alexa.profilePictureUrl(num, 'image')
                 } catch {
                     ppuser = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
                 }
@@ -214,145 +147,92 @@ async function startAlexa() {
         }
     })
 
-    // Setting
-    alexa.decodeJid = (jid) => {
+// Setting
+    Alexa.decodeJid = (jid) => {
         if (!jid) return jid
         if (/:\d+@/gi.test(jid)) {
             let decode = jidDecode(jid) || {}
             return decode.user && decode.server && decode.user + '@' + decode.server || jid
         } else return jid
     }
-
-    alexa.ev.on('contacts.update', async update => {
+    
+    Alexa.ev.on('contacts.update', update => {
         for (let contact of update) {
-            let id = alexa.decodeJid(contact.id)
-            user.findOne({ id: id }).then((usr) => {
-                if (!usr) {
-                    new user({ id: id, name: contact.notify }).save()
-                    console.log("user added")
-                } else {
-                    user.updateOne({ id: id }, { name: contact.notify })
-                    console.log("user updated")
-
-                }
-            })
+            let id = Alexa.decodeJid(contact.id)
+            if (store && store.contacts) store.contacts[id] = { id, name: contact.notify }
         }
     })
 
-    alexa.getName = (jid, withoutContact = false) => {
-        id = alexa.decodeJid(jid)
-        withoutContact = alexa.withoutContact || withoutContact
+    Alexa.getName = (jid, withoutContact  = false) => {
+        id = Alexa.decodeJid(jid)
+        withoutContact = Alexa.withoutContact || withoutContact 
         let v
         if (id.endsWith("@g.us")) return new Promise(async (resolve) => {
             v = store.contacts[id] || {}
-            if (!(v.name || v.subject)) v = alexa.groupMetadata(id) || {}
+            if (!(v.name || v.subject)) v = Alexa.groupMetadata(id) || {}
             resolve(v.name || v.subject || PhoneNumber('+' + id.replace('@s.whatsapp.net', '')).getNumber('international'))
         })
         else v = id === '0@s.whatsapp.net' ? {
             id,
             name: 'WhatsApp'
-        } : id === alexa.decodeJid(arus.user.id) ?
-            alexa.user :
+        } : id === Alexa.decodeJid(Alexa.user.id) ?
+            Alexa.user :
             (store.contacts[id] || {})
-        return (withoutContact ? '' : v.name) || v.subject || v.verifiedName || PhoneNumber('+' + jid.replace('@s.whatsapp.net', '')).getNumber('international')
+            return (withoutContact ? '' : v.name) || v.subject || v.verifiedName || PhoneNumber('+' + jid.replace('@s.whatsapp.net', '')).getNumber('international')
     }
-
-    alexa.sendContact = async (jid, kon, quoted = '', opts = {}) => {
+    
+        Alexa.sendContact = async (jid, kon, quoted = '', opts = {}) => {
         let list = []
         for (let i of kon) {
             list.push({
-                displayName: await alexa.getName(i + '@s.whatsapp.net'),
-                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await arus.getName(i + '@s.whatsapp.net')}\nFN:${await alexa.getName(i + '@s.whatsapp.net')}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Phone\nitem2.EMAIL;type=INTERNET:amdablack63@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://instagram.com/CYBERXKID\nitem3.X-ABLabel:Instagram\nitem4.ADR:;;India;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
+                displayName: await Alexa.getName(i + '@s.whatsapp.net'),
+                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await arus.getName(i + '@s.whatsapp.net')}\nFN:${await Alexa.getName(i + '@s.whatsapp.net')}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Phone\nitem2.EMAIL;type=INTERNET:amdablack63@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://instagram.com/CYBERXKID\nitem3.X-ABLabel:Instagram\nitem4.ADR:;;India;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
             })
         }
-        alexa.sendMessage(jid, { contacts: { displayName: `${list.length} contact`, contacts: list }, ...opts }, { quoted })
+        Alexa.sendMessage(jid, { contacts: { displayName: `${list.length} contact`, contacts: list }, ...opts }, { quoted })
     }
+    
+    Alexa.setStatus = (status) => {
+        Alexa.query({
+            tag: 'iq',
+            attrs: {
+                to: '@s.whatsapp.net',
+                type: 'set',
+                xmlns: 'status',
+            },
+            content: [{
+                tag: 'status',
+                attrs: {},
+                content: Buffer.from(status, 'utf-8')
+            }]
+        })
+        return status
+    }
+	
+    Alexa.public = true
 
-    alexa.public = true
+    Alexa.serializeM = (m) => smsg(Alexa, m, store)
 
-    alexa.serializeM = (m) => smsg(arus, m, store)
-
-    alexa.ev.on('connection.update', async (update) => {
-        const { lastDisconnect, connection, qr } = update
+    Alexa.ev.on('connection.update', async (update) => {
+        const { connection, lastDisconnect } = update	    
         if (connection === 'close') {
-            lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut ? startAlexa() : console.log('Conneting...')
+        let reason = lastDisconnect.error ? lastDisconnect?.error?.output.statusCode : 0;
+            if (reason === DisconnectReason.badSession) { console.log(`Bad Session File, Please Delete Session and Scan Again`); process.exit(); }
+            else if (reason === DisconnectReason.connectionClosed) { console.log("Connection closed, reconnecting...."); startAlexa(); }
+            else if (reason === DisconnectReason.connectionLost) { console.log("Connection Lost from Server, reconnecting..."); startAlexa(); }
+            else if (reason === DisconnectReason.connectionReplaced) { console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First"); process.exit(); }
+            else if (reason === DisconnectReason.loggedOut) { console.log(`Device Logged Out, Please Delete Session and Scan Again.`); process.exit(); }
+            else if (reason === DisconnectReason.restartRequired) { console.log("Restart Required, Restarting..."); startAlexa(); }
+            else if (reason === DisconnectReason.timedOut) { console.log("Connection TimedOut, Reconnecting..."); startAlexa(); }
+            else { console.log(`Unknown DisconnectReason: ${reason}|${connection}`) }
         }
-        if (qr) {
-            QR_GENERATE = qr;
-        }
-        console.log('Connection...', update)
+        console.log('Connected...', update)
     })
 
-    alexa.ev.on('creds.update', () => {
-        saveState();
-        try {
-            let noiseKey = JSON.stringify(state.creds.noiseKey);
-            let signedIdentityKey = JSON.stringify(state.creds.signedIdentityKey);
-            let signedPreKey = JSON.stringify(state.creds.signedPreKey);
-            let registrationId = state.creds.registrationId;
-            let advSecretKey = state.creds.advSecretKey;
-            let nextPreKeyId = state.creds.nextPreKeyId;
-            let firstUnuploadedPreKeyId = state.creds.firstUnuploadedPreKeyId;
-            let serverHasPreKeys = state.creds.serverHasPreKeys;
-            let account = JSON.stringify(state.creds.account);
-            let me = JSON.stringify(state.creds.me);
-            let signalIdentities = JSON.stringify(state.creds.signalIdentities);
-            let lastAccountSyncTimestamp = state.creds.lastAccountSyncTimestamp;
-            // let lastAccountSyncTimestamp = 0;
-            let myAppStateKeyId = state.creds.myAppStateKeyId; //?
-
-            // INSERT / UPDATE LOGIN DATA
-            if (auth_row_count == 0) {
-                console.log("Inserting login data...");
-                pool.query(
-                    "INSERT INTO auth VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13);",
-                    [
-                        noiseKey,
-                        signedIdentityKey,
-                        signedPreKey,
-                        registrationId,
-                        advSecretKey,
-                        nextPreKeyId,
-                        firstUnuploadedPreKeyId,
-                        serverHasPreKeys,
-                        account,
-                        me,
-                        signalIdentities,
-                        lastAccountSyncTimestamp,
-                        myAppStateKeyId,
-                    ]
-                );
-                pool.query("commit;");
-                console.log("New login data inserted!");
-            } else {
-                // console.log("Updating login data....");
-                pool.query(
-                    "UPDATE auth SET noiseKey = $1, signedIdentityKey = $2, signedPreKey = $3, registrationId = $4, advSecretKey = $5, nextPreKeyId = $6, firstUnuploadedPreKeyId = $7, serverHasPreKeys = $8, account = $9, me = $10, signalIdentities = $11, lastAccountSyncTimestamp = $12, myAppStateKeyId = $13;",
-                    [
-                        noiseKey,
-                        signedIdentityKey,
-                        signedPreKey,
-                        registrationId,
-                        advSecretKey,
-                        nextPreKeyId,
-                        firstUnuploadedPreKeyId,
-                        serverHasPreKeys,
-                        account,
-                        me,
-                        signalIdentities,
-                        lastAccountSyncTimestamp,
-                        myAppStateKeyId,
-                    ]
-                );
-                pool.query("commit;");
-                console.log("Login data updated!");
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    })
+    Alexa.ev.on('creds.update', saveState)
 
     // Add Other
+   
     /** Send Button 5 Image
      *
      * @param {*} jid
@@ -363,19 +243,19 @@ async function startAlexa() {
      * @param {*} options
      * @returns
      */
-    alexa.send5ButImg = async (jid, text = '', footer = '', img, but = [], options = {}) => {
-        let message = await prepareWAMessageMedia({ image: img }, { upload: alexa.waUploadToServer })
+    Alexa.send5ButImg = async (jid , text = '' , footer = '', img, but = [], thumb, options = {}) =>{
+        let message = await prepareWAMessageMedia({ image: img, jpegThumbnail:thumb }, { upload: Alexa.waUploadToServer })
         var template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-            templateMessage: {
-                hydratedTemplate: {
-                    imageMessage: message.imageMessage,
-                    "hydratedContentText": text,
-                    "hydratedFooterText": footer,
-                    "hydratedButtons": but
-                }
+        templateMessage: {
+        hydratedTemplate: {
+        imageMessage: message.imageMessage,
+               "hydratedContentText": text,
+               "hydratedFooterText": footer,
+               "hydratedButtons": but
             }
-        }), options)
-        alexa.relayMessage(jid, template.message, { messageId: template.key.id })
+            }
+            }), options)
+            Alexa.relayMessage(jid, template.message, { messageId: template.key.id })
     }
 
     /**
@@ -387,7 +267,7 @@ async function startAlexa() {
      * @param {*} quoted 
      * @param {*} options 
      */
-    alexa.sendButtonText = (jid, buttons = [], text, footer, quoted = '', options = {}) => {
+    Alexa.sendButtonText = (jid, buttons = [], text, footer, quoted = '', options = {}) => {
         let buttonMessage = {
             text,
             footer,
@@ -395,9 +275,9 @@ async function startAlexa() {
             headerType: 2,
             ...options
         }
-        alexa.sendMessage(jid, buttonMessage, { quoted, ...options })
+        Alexa.sendMessage(jid, buttonMessage, { quoted, ...options })
     }
-
+    
     /**
      * 
      * @param {*} jid 
@@ -406,7 +286,7 @@ async function startAlexa() {
      * @param {*} options 
      * @returns 
      */
-    alexa.sendText = (jid, text, quoted = '', options) => arus.sendMessage(jid, { text: text, ...options }, { quoted })
+    Alexa.sendText = (jid, text, quoted = '', options) => Alexa.sendMessage(jid, { text: text, ...options }, { quoted })
 
     /**
      * 
@@ -417,9 +297,9 @@ async function startAlexa() {
      * @param {*} options 
      * @returns 
      */
-    alexa.sendImage = async (jid, path, caption = '', quoted = '', options) => {
-        let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
-        return await alexa.sendMessage(jid, { image: buffer, caption: caption, ...options }, { quoted })
+    Alexa.sendImage = async (jid, path, caption = '', quoted = '', options) => {
+	let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
+        return await Alexa.sendMessage(jid, { image: buffer, caption: caption, ...options }, { quoted })
     }
 
     /**
@@ -431,9 +311,9 @@ async function startAlexa() {
      * @param {*} options 
      * @returns 
      */
-    alexa.sendVideo = async (jid, path, caption = '', quoted = '', gif = false, options) => {
+    Alexa.sendVideo = async (jid, path, caption = '', quoted = '', gif = false, options) => {
         let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
-        return await alexa.sendMessage(jid, { video: buffer, caption: caption, gifPlayback: gif, ...options }, { quoted })
+        return await Alexa.sendMessage(jid, { video: buffer, caption: caption, gifPlayback: gif, ...options }, { quoted })
     }
 
     /**
@@ -445,9 +325,9 @@ async function startAlexa() {
      * @param {*} options 
      * @returns 
      */
-    alexa.sendAudio = async (jid, path, quoted = '', ptt = false, options) => {
+    Alexa.sendAudio = async (jid, path, quoted = '', ptt = false, options) => {
         let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
-        return await arus.sendMessage(jid, { audio: buffer, ptt: ptt, ...options }, { quoted })
+        return await Alexa.sendMessage(jid, { audio: buffer, ptt: ptt, ...options }, { quoted })
     }
 
     /**
@@ -458,7 +338,7 @@ async function startAlexa() {
      * @param {*} options 
      * @returns 
      */
-    alexa.sendTextWithMentions = async (jid, text, quoted, options = {}) => alexa.sendMessage(jid, { text: text, contextInfo: { mentionedJid: [...text.matchAll(/@(\d{0,16})/g)].map(v => v[1] + '@s.whatsapp.net') }, ...options }, { quoted })
+    Alexa.sendTextWithMentions = async (jid, text, quoted, options = {}) => Alexa.sendMessage(jid, { text: text, contextInfo: { mentionedJid: [...text.matchAll(/@(\d{0,16})/g)].map(v => v[1] + '@s.whatsapp.net') }, ...options }, { quoted })
 
     /**
      * 
@@ -468,7 +348,7 @@ async function startAlexa() {
      * @param {*} options 
      * @returns 
      */
-    alexa.sendImageAsSticker = async (jid, path, quoted, options = {}) => {
+    Alexa.sendImageAsSticker = async (jid, path, quoted, options = {}) => {
         let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
         let buffer
         if (options && (options.packname || options.author)) {
@@ -477,7 +357,7 @@ async function startAlexa() {
             buffer = await imageToWebp(buff)
         }
 
-        await alexa.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
+        await Alexa.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
         return buffer
     }
 
@@ -489,7 +369,7 @@ async function startAlexa() {
      * @param {*} options 
      * @returns 
      */
-    alexa.sendVideoAsSticker = async (jid, path, quoted, options = {}) => {
+    Alexa.sendVideoAsSticker = async (jid, path, quoted, options = {}) => {
         let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
         let buffer
         if (options && (options.packname || options.author)) {
@@ -498,10 +378,33 @@ async function startAlexa() {
             buffer = await videoToWebp(buff)
         }
 
-        await alexa.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
+        await Alexa.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
         return buffer
     }
-
+	Alexa.sendMedia = async (jid, path, fileName = '', caption = '', quoted = '', options = {}) => {
+        let types = await Alexa.getFile(path, true)
+           let { mime, ext, res, data, filename } = types
+           if (res && res.status !== 200 || file.length <= 65536) {
+               try { throw { json: JSON.parse(file.toString()) } }
+               catch (e) { if (e.json) throw e.json }
+           }
+       let type = '', mimetype = mime, pathFile = filename
+       if (options.asDocument) type = 'document'
+       if (options.asSticker || /webp/.test(mime)) {
+        let { writeExif } = require('./lib/exif')
+        let media = { mimetype: mime, data }
+        pathFile = await writeExif(media, { packname: options.packname ? options.packname : global.packname, author: options.author ? options.author : global.author, categories: options.categories ? options.categories : [] })
+        await fs.promises.unlink(filename)
+        type = 'sticker'
+        mimetype = 'image/webp'
+        }
+       else if (/image/.test(mime)) type = 'image'
+       else if (/video/.test(mime)) type = 'video'
+       else if (/audio/.test(mime)) type = 'audio'
+       else type = 'document'
+       await Alexa.sendMessage(jid, { [type]: { url: pathFile }, caption, mimetype, fileName, ...options }, { quoted, ...options })
+       return fs.promises.unlink(pathFile)
+       }
     /**
      * 
      * @param {*} message 
@@ -509,69 +412,34 @@ async function startAlexa() {
      * @param {*} attachExtension 
      * @returns 
      */
-    alexa.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
+    Alexa.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
         let quoted = message.msg ? message.msg : message
         let mime = (message.msg || message).mimetype || ''
         let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0]
         const stream = await downloadContentFromMessage(quoted, messageType)
         let buffer = Buffer.from([])
-        for await (const chunk of stream) {
+        for await(const chunk of stream) {
             buffer = Buffer.concat([buffer, chunk])
         }
-        let type = await FileType.fromBuffer(buffer)
+	let type = await FileType.fromBuffer(buffer)
         trueFileName = attachExtension ? (filename + '.' + type.ext) : filename
         // save to file
         await fs.writeFileSync(trueFileName, buffer)
         return trueFileName
     }
 
-    alexa.downloadMediaMessage = async (message) => {
+    Alexa.downloadMediaMessage = async (message) => {
         let mime = (message.msg || message).mimetype || ''
         let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0]
         const stream = await downloadContentFromMessage(message, messageType)
         let buffer = Buffer.from([])
-        for await (const chunk of stream) {
+        for await(const chunk of stream) {
             buffer = Buffer.concat([buffer, chunk])
-        }
-
-        return buffer
-    }
-
-    /**
-     * 
-     * @param {*} jid 
-     * @param {*} path 
-     * @param {*} filename
-     * @param {*} caption
-     * @param {*} quoted 
-     * @param {*} options 
-     * @returns 
-     */
-    alexa.sendMedia = async (jid, path, fileName = '', caption = '', quoted = '', options = {}) => {
-        let types = await alexa.getFile(path, true)
-        let { mime, ext, res, data, filename } = types
-        if (res && res.status !== 200 || file.length <= 65536) {
-            try { throw { json: JSON.parse(file.toString()) } }
-            catch (e) { if (e.json) throw e.json }
-        }
-        let type = '', mimetype = mime, pathFile = filename
-        if (options.asDocument) type = 'document'
-        if (options.asSticker || /webp/.test(mime)) {
-            let { writeExif } = require('./lib/exif')
-            let media = { mimetype: mime, data }
-            pathFile = await writeExif(media, { packname: options.packname ? options.packname : global.packname, author: options.author ? options.author : global.author, categories: options.categories ? options.categories : [] })
-            await fs.promises.unlink(filename)
-            type = 'sticker'
-            mimetype = 'image/webp'
-        }
-        else if (/image/.test(mime)) type = 'image'
-        else if (/video/.test(mime)) type = 'video'
-        else if (/audio/.test(mime)) type = 'audio'
-        else type = 'document'
-        await alexa.sendMessage(jid, { [type]: { url: pathFile }, caption, mimetype, fileName, ...options }, { quoted, ...options })
-        return fs.promises.unlink(pathFile)
-    }
-
+	}
+        
+	return buffer
+     } 
+    
     /**
      * 
      * @param {*} jid 
@@ -580,22 +448,22 @@ async function startAlexa() {
      * @param {*} options 
      * @returns 
      */
-    alexa.copyNForward = async (jid, message, forceForward = false, options = {}) => {
+    Alexa.copyNForward = async (jid, message, forceForward = false, options = {}) => {
         let vtype
-        if (options.readViewOnce) {
-            message.message = message.message && message.message.ephemeralMessage && message.message.ephemeralMessage.message ? message.message.ephemeralMessage.message : (message.message || undefined)
-            vtype = Object.keys(message.message.viewOnceMessage.message)[0]
-            delete (message.message && message.message.ignore ? message.message.ignore : (message.message || undefined))
-            delete message.message.viewOnceMessage.message[vtype].viewOnce
-            message.message = {
-                ...message.message.viewOnceMessage.message
-            }
-        }
+		if (options.readViewOnce) {
+			message.message = message.message && message.message.ephemeralMessage && message.message.ephemeralMessage.message ? message.message.ephemeralMessage.message : (message.message || undefined)
+			vtype = Object.keys(message.message.viewOnceMessage.message)[0]
+			delete(message.message && message.message.ignore ? message.message.ignore : (message.message || undefined))
+			delete message.message.viewOnceMessage.message[vtype].viewOnce
+			message.message = {
+				...message.message.viewOnceMessage.message
+			}
+		}
 
         let mtype = Object.keys(message.message)[0]
         let content = await generateForwardMessageContent(message, forceForward)
         let ctype = Object.keys(content)[0]
-        let context = {}
+		let context = {}
         if (mtype != "conversation") context = message.message[mtype].contextInfo
         content[ctype].contextInfo = {
             ...context,
@@ -611,32 +479,45 @@ async function startAlexa() {
                 }
             } : {})
         } : {})
-        await alexa.relayMessage(jid, waMessage.message, { messageId: waMessage.key.id })
+        await Alexa.relayMessage(jid, waMessage.message, { messageId:  waMessage.key.id })
         return waMessage
     }
 
-    alexa.cMod = (jid, copy, text = '', sender = alexa.user.id, options = {}) => {
+//sendlistmsg by liza
+        Alexa.sendListMsg = (jid, text = '', footer = '', title = '' , butText = '', sects = [], quoted) => {
+        let sections = sects
+        var listMes = {
+        text: text,
+        footer: footer,
+        title: title,
+        buttonText: butText,
+        sections
+        }
+        Alexa.sendMessage(jid, listMes, { quoted: quoted })
+        }
+        
+    Alexa.cMod = (jid, copy, text = '', sender = Alexa.user.id, options = {}) => {
         //let copy = message.toJSON()
-        let mtype = Object.keys(copy.message)[0]
-        let isEphemeral = mtype === 'ephemeralMessage'
+		let mtype = Object.keys(copy.message)[0]
+		let isEphemeral = mtype === 'ephemeralMessage'
         if (isEphemeral) {
             mtype = Object.keys(copy.message.ephemeralMessage.message)[0]
         }
         let msg = isEphemeral ? copy.message.ephemeralMessage.message : copy.message
-        let content = msg[mtype]
+		let content = msg[mtype]
         if (typeof content === 'string') msg[mtype] = text || content
-        else if (content.caption) content.caption = text || content.caption
-        else if (content.text) content.text = text || content.text
-        if (typeof content !== 'string') msg[mtype] = {
-            ...content,
-            ...options
+		else if (content.caption) content.caption = text || content.caption
+		else if (content.text) content.text = text || content.text
+		if (typeof content !== 'string') msg[mtype] = {
+			...content,
+			...options
         }
         if (copy.key.participant) sender = copy.key.participant = sender || copy.key.participant
-        else if (copy.key.participant) sender = copy.key.participant = sender || copy.key.participant
-        if (copy.key.remoteJid.includes('@s.whatsapp.net')) sender = sender || copy.key.remoteJid
-        else if (copy.key.remoteJid.includes('@broadcast')) sender = sender || copy.key.remoteJid
-        copy.key.remoteJid = jid
-        copy.key.fromMe = sender === alexa.user.id
+		else if (copy.key.participant) sender = copy.key.participant = sender || copy.key.participant
+		if (copy.key.remoteJid.includes('@s.whatsapp.net')) sender = sender || copy.key.remoteJid
+		else if (copy.key.remoteJid.includes('@broadcast')) sender = sender || copy.key.remoteJid
+		copy.key.remoteJid = jid
+		copy.key.fromMe = sender === Alexa.user.id
 
         return proto.WebMessageInfo.fromObject(copy)
     }
@@ -647,7 +528,7 @@ async function startAlexa() {
      * @param {*} path 
      * @returns 
      */
-    alexa.getFile = async (PATH, save) => {
+    Alexa.getFile = async (PATH, save) => {
         let res
         let data = Buffer.isBuffer(PATH) ? PATH : /^data:.*?\/.*?;base64,/i.test(PATH) ? Buffer.from(PATH.split`,`[1], 'base64') : /^https?:\/\//.test(PATH) ? await (res = await getBuffer(PATH)) : fs.existsSync(PATH) ? (filename = PATH, fs.readFileSync(PATH)) : typeof PATH === 'string' ? PATH : Buffer.alloc(0)
         //if (!Buffer.isBuffer(data)) throw new TypeError('Result is not a buffer')
@@ -655,36 +536,92 @@ async function startAlexa() {
             mime: 'application/octet-stream',
             ext: '.bin'
         }
-        filename = path.join(__filename, '../trash/' + new Date * 1 + '.' + type.ext)
+        filename = path.join(__filename, '../src/' + new Date * 1 + '.' + type.ext)
         if (data && save) fs.promises.writeFile(filename, data)
         return {
             res,
             filename,
-            size: await getSizeMedia(data),
+	    size: await getSizeMedia(data),
             ...type,
             data
         }
 
     }
+    //send5butgif by liza
+        Alexa.send5ButGif = async (jid , text = '' , footer = '', gif, but = [], options = {}) =>{
+        let message = await prepareWAMessageMedia({ video: gif, gifPlayback: true }, { upload: Alexa.waUploadToServer })
+        var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
+        templateMessage: {
+        hydratedTemplate: {
+        videoMessage: message.videoMessage,
+               "hydratedContentText": text,
+               "hydratedFooterText": footer,
+               "hydratedButtons": but
+            }
+            }
+            }), options)
+            Alexa.relayMessage(jid, template.message, { messageId: template.key.id })
+    }
+    //send5butvid by liza
+        Alexa.send5ButVid = async (jid , text = '' , footer = '', vid, but = [], options = {}) =>{
+        let message = await prepareWAMessageMedia({ video: vid }, { upload: Alexa.waUploadToServer })
+        var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
+        templateMessage: {
+        hydratedTemplate: {
+        videoMessage: message.videoMessage,
+               "hydratedContentText": text,
+               "hydratedFooterText": footer,
+               "hydratedButtons": but
+            }
+            }
+            }), options)
+            Alexa.relayMessage(jid, template.message, { messageId: template.key.id })
+    }
+    //send5butmsg
+            Alexa.send5ButMsg = (jid, text = '' , footer = '', but = []) =>{
+        let templateButtons = but
+        var templateMessage = {
+        text: text,
+        footer: footer,
+        templateButtons: templateButtons
+        }
+        Alexa.sendMessage(jid, templateMessage)
+        }
+        
+    Alexa.sendFile = async(jid, PATH, fileName, quoted = {}, options = {}) => {
+        let types = await Alexa.getFile(PATH, true)
+        let { filename, size, ext, mime, data } = types
+        let type = '', mimetype = mime, pathFile = filename
+        if (options.asDocument) type = 'document'
+        if (options.asSticker || /webp/.test(mime)) {
+            let { writeExif } = require('./lib/sticker.js')
+            let media = { mimetype: mime, data }
+            pathFile = await writeExif(media, { packname: global.packname, author: global.packname, categories: options.categories ? options.categories : [] })
+            await fs.promises.unlink(filename)
+            type = 'sticker'
+            mimetype = 'image/webp'
+        }
+        else if (/image/.test(mime)) type = 'image'
+        else if (/video/.test(mime)) type = 'video'
+        else if (/audio/.test(mime)) type = 'audio'
+        else type = 'document'
+        await Alexa.sendMessage(jid, { [type]: { url: pathFile }, mimetype, fileName, ...options }, { quoted, ...options })
+        return fs.promises.unlink(pathFile)
+    }
+    Alexa.parseMention = async(text) => {
+        return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net')
+    }
 
-    return alexa
+    return Alexa
 }
 
 startAlexa()
 
-app.use(async (req, res) => {
-    res.setHeader("content-type", "image/png");
-    res.end(await qrcode.toBuffer(QR_GENERATE));
-});
-
-app.listen(PORT, () => {
-    console.log(`Server running on PORT ${PORT}`);
-});
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
-    fs.unwatchFile(file)
-    console.log(chalk.redBright(`Update ${__filename}`))
-    delete require.cache[file]
-    require(file)
+	fs.unwatchFile(file)
+	console.log(chalk.redBright(`${__filename} Updated`))
+	delete require.cache[file]
+	require(file)
 })
