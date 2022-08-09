@@ -1,6 +1,14 @@
 const fs = require("fs");
 const chalk = require("chalk");
 
+//documents variants
+global.doc1 = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+global.doc2 = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+global.doc3 = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+global.doc4 = 'application/zip'
+global.doc5 = 'application/pdf'
+global.doc6 = 'application/vnd.android.package-archive'
+
 // Other
 let gg = process.env.MODS;
 if (!gg) {
