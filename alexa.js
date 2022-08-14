@@ -8908,8 +8908,8 @@ title:"I deserve something for my hardwork",
 body: "Click to donate", 
 thumbnail: fs.readFileSync("AlexaMedia/theme/cybxkid.jpg"),
 mediaType:1,
-mediaUrl: 'https://chat.whatsapp.com/Is8xpAxp6852pmgRdC2qmy',
-sourceUrl: "https://chat.whatsapp.com/Is8xpAxp6852pmgRdC2qmy',
+mediaUrl: "https://ibb.co/Sf5NR6X",
+sourceUrl: "https://chat.whatsapp.com/Is8xpAxp6852pmgRdC2qmy", // use double quotes 🐤.
 }}
 }
 AlexaInc.sendMessage(m.chat, buttonMessage, { quoted: m })
