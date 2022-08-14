@@ -8908,8 +8908,8 @@ title:"I deserve something for my hardwork",
 body: "Click to donate", 
 thumbnail: fs.readFileSync("AlexaMedia/theme/cybxkid.jpg"),
 mediaType:1,
-mediaUrl: 'https://i.ibb.co/TPLgRdk/Alexa.jpg',
-sourceUrl: "https://i.ibb.co/TPLgRdk/Alexa.jpg',
+mediaUrl: 'https://chat.whatsapp.com/Is8xpAxp6852pmgRdC2qmy',
+sourceUrl: "https://chat.whatsapp.com/Is8xpAxp6852pmgRdC2qmy',
 }}
 }
 AlexaInc.sendMessage(m.chat, buttonMessage, { quoted: m })
@@ -8964,7 +8964,7 @@ AlexaInc.sendMessage(from, { react: { text: `${global.reactmoji}`, key: m.key }}
             { quickReplyButton: { displayText: `List Menu 🍢`, id: 'command'} },
             { quickReplyButton: { displayText: `Owner 🤣`, id: 'owner'} }
         	]
-        	AlexaInc.sendMessage(m.chat, { caption: menulist, document: fs.readFileSync('./AlexaMedia/theme/alexa.xlsx'), mimetype: `${docs}`, fileName: `${ownername}`, templateButtons: buttonmenu, footer: `${botname}`, mentionedJid: [m.sender] })
+        	AlexaInc.sendMessage(m.chat, { caption: menulist, video: fs.readFileSync('./AlexaMedia/theme/alexa.mp4'), mimetype: `${docs}`, fileName: `${ownername}`, templateButtons: buttonmenu, footer: `${botname}`, mentionedJid: [m.sender] })
                         }
                      }
             break
