@@ -71,6 +71,7 @@
   },
   "directories": {
     "lib": "lib",
+    "src": "src",
     "trash": "trash"
   },
   "devDependencies": {},
