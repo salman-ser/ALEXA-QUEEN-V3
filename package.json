@@ -84,11 +84,11 @@
     "xfarr-api": "^2.0.0",
     "yargs": "^17.2.1",
     "yt-search": "^2.10.3",
-    "alexaqueen": "^4.0.1",
+    "alexaqueen": "^4.0.1",//this is not a valid npm package fix it
     "zimbot-v4": "4.0.1"
   },
   "directories": {
-    "lib": "lib"
+    "lib": "lib", // dont miss a comma in😊
     "trash": "trash"
   },
   "repository": {
