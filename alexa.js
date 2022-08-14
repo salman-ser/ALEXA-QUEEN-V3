@@ -2373,7 +2373,7 @@ case 'dare':
     "Whats the strangest dream you have ever had",
     "do you play pubg, if you then send ur id number"
 ]
-              const alexatruth = truth[Math.floor(Math.random() * truth.length)]v
+              const alexatruth = truth[Math.floor(Math.random() * truth.length)]
               buffer = await getBuffer(`https://i.ibb.co/305yt26/bf84f20635dedd5dde31e7e5b6983ae9.jpg`)
               AlexaInc.sendMessage(from, { image: buffer, caption: '_You choose TRUTH_\n'+ alexatruth }, {quoted:m})
               break
