@@ -2362,7 +2362,7 @@ case 'dare':
     "what is a secret you kept from your parents",
     "Who is your secret crush",
     "whois the last person you creeped on social media",
-    "If a genie granted you three wishes, what would you ask for…"
+    "If a genie granted you three wishes, what would you ask for…",
     "What animal do you think you most look like",
     "How many selfies do you take a day",
     "What was your favorite childhood show",
