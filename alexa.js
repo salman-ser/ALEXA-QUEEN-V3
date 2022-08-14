@@ -2363,7 +2363,6 @@ case 'dare':
     "Who is your secret crush",
     "whois the last person you creeped on social media",
     "If a genie granted you three wishes, what would you ask for…"
-    "What is your biggest regret",
     "What animal do you think you most look like",
     "How many selfies do you take a day",
     "What was your favorite childhood show",
