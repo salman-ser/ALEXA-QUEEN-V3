@@ -24,7 +24,8 @@
 
 <br>
     <h1>OWNER</h1>
-    <b><table><tr><th>ALEXA QUEEN</th></tr><tr><td><a href="https://github.com/Diegoson"><img src="https://i.ibb.co/Q9hKwq6/IMG-20220820-WA0000.jpg" width="180"</td></tr></b><br><h1>DEVELOPER</h1><b><table><tr><th>CYBERXKID</th></tr><tr><td><a href="https://github.com/Diegoson"><img src="https://i.ibb.co/4mqXjQ0/20220820-175325.jpg" width="180"</td></tr></b>
+    <b><table><tr><th>ALEXA QUEEN</th></tr><tr><td><a href="https://github.com/Diegoson"><img src="https://i.ibb.co/Q9hKwq6/IMG-20220820-WA0000.jpg" width="180"</td></tr></b><br>
+<h1>DEVELOPER</h1><b><table><tr><th>CYBERXKID</th></tr><tr><td><a href="https://github.com/Diegoson"><img src="https://i.ibb.co/4mqXjQ0/20220820-175325.jpg" width="180"</td></tr></b>
 
     
 
