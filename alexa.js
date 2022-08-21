@@ -352,7 +352,6 @@ let alexasticker = JSON.parse(fs.readFileSync('./AlexaMedia/theme/Media-Store-Ka
 let alexaaudio = JSON.parse(fs.readFileSync('./AlexaMedia/theme/Media-Store-Karne-Ke-Liye/audio.json'));
 let alexaimage = JSON.parse(fs.readFileSync('./AlexaMedia/theme/Media-Store-Karne-Ke-Liye/image.json'));
 let alexavideo = JSON.parse(fs.readFileSync('./AlexaMedia/theme/Media-Store-Karne-Ke-Liye/video.json'));
-let autosticker = JSON.parse(fs.readFileSync('./database/autosticker.json'));
 const _autostick = JSON.parse(fs.readFileSync('./database/autostickpc.json'));
 let banUser = JSON.parse(fs.readFileSync('./database/banUser.json'));
 let banchat = JSON.parse(fs.readFileSync('./database/banChat.json'));
