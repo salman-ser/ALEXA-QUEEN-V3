@@ -1,1 +1,24 @@
-
+{
+  "name": "ALEXA QUEEN",
+  "description": "alexa queen powered by cybxkid",
+  "repository": "https://github.com/Diegoson",
+  "logo": "https://i.ibb.co/TPLgRdk/Alexa.jpg?v=4",
+  "keywords": ["nodejs", "bot", "whatsapp bot", "whatsapp automation"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+    },
+    {
+      "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git"
+    }
+  ],
+   "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
+}
