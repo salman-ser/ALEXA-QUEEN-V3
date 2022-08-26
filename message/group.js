@@ -31,11 +31,10 @@ const Remove = anu.action == "remove"
 const OneMem = anu.participants.length === 1
 const NotMe = !mem.includes(botNumber) 
 const intro = `
-Halo @${memNumber}
-Welcome in Gc ${groupName} 
-jangan lupa baca dan following rules group
-semoga Betah yak `;
-const outro = `Asik beban grup keluar \nKena mental dia :v`
+*Hello* @${memNumber}
+*Welcome to ${groupName}*
+*Don't forget to read description!* `;
+const outro = `Take care by friend \nGoodbye`
 
 try {
 if(mem.includes(botNumber)) { return }
@@ -58,11 +57,11 @@ var pp_grup = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-pict
 let butIn = [
 { buttonId: `y`, 
 buttonText: { 
-displayText: "Oke siap" }, 
+displayText: "Welcome" }, 
 type: 1 },
-{ buttonId: `bullyuk `, 
+{ buttonId: `/`, 
 buttonText: { 
-displayText: "Intro dulu" }, 
+displayText: "Thanks" }, 
 type: 1 } 
  ];         
  
@@ -70,7 +69,7 @@ type: 1 }
 let butOut= [{ 
 buttonId: `y`, 
 buttonText: { 
-displayText: "Nitip gorengan" },
+displayText: "Good Bye" },
 type: 1 }
 ];   
 
