@@ -1,6 +1,6 @@
-global.language = "id"
+global.language = "en"
 global.nomerOwner ="27686881509"
-global.nomerOwner2 = "27686881509"
+global.nomerOwner2 = "919961857267"
 global.runWith = "Heroku"
 global.ownerName = "CYBERXKID"
 global.botName = "ALEXA QUEEN'" 
