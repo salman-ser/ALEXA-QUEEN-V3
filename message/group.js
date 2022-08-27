@@ -34,7 +34,7 @@ const intro = `
 *Hello* @${memNumber}
 *Welcome to ${groupName}*
 *Don't forget to read description!* `;
-const outro = `Take care by friend \nGoodbye`
+const outro = `Bye friend you aren't important anyway \nGoodbye`
 
 try {
 if(mem.includes(botNumber)) { return }
