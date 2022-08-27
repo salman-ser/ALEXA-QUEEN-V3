@@ -9,7 +9,7 @@ const {weton,week,calender,dateIslamic} = require('../lib/functions')
 const {kyun} = require("../lib/myfunc");
 moment.tz.setDefault("Asia/Kolkata").locale("id");
 
-//Total features by team liza mwol
+//Total features by team alexa queen
 const totalFitur = () =>{
 var mytext = fs.readFileSync("./message/msg.js").toString()
 var numUpper = (mytext.match(/case/g) || []).length;
