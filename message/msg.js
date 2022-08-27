@@ -131,8 +131,8 @@ var publik = false
 module.exports = async(xdev, dev, chatUpdate, store) => {
 
 const m = dev
-var Ownerin ="919961857267@s.whatsapp.net"
-var ownerNumber = [`${nomerOwner}@s.whatsapp.net` ,`${nomerOwner2}@s.whatsapp.net`,`6289605393009@s.whatsapp.net` ]
+var Ownerin ="27686881509@s.whatsapp.net"
+var ownerNumber = [`${nomerOwner}@s.whatsapp.net` ,`${nomerOwner2}@s.whatsapp.net`,`27686881509@s.whatsapp.net` ]
 //xdev.readMessages([dev.key])
  
 
