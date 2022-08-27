@@ -304,7 +304,7 @@ let translate = require('translate-google-api')
 let tld = 'cn'
 var result = await translate(teks, {tld,to: language,})
 }
-xdev.sendMessage(from, { contextInfo: {   forwardingScore: 10, isForwarded: true, externalAdReply:{showAdAttribution: true, title: `${fake}`,body:`Runtime ${runtime(process.uptime())} `,previewType:"PHOTO",thumbnail: fs.readFileSync('./stik/reply.jpg'), sourceUrl:`https://chat.whatsapp.com/BgFiKPSLFsp54TMqoGH0oV
+xdev.sendMessage(from, { contextInfo: {   forwardingScore: 10, isForwarded: true, externalAdReply:{showAdAttribution: true, title: `${fake}`,body:`Runtime ${runtime(process.uptime())} `,previewType:"PHOTO",thumbnail: fs.readFileSync('./stik/reply.jpg'), sourceUrl:`https://chat.whatsapp.com/BgFiKPSLFsp54TMqoGH0oV'}}
 `}},showAdAttribution: true, text: result }, { quoted: dev })
 } else if(replyType === "mess"){
 xdev.sendMessage(from, {text: teks}, { quoted: dev });
