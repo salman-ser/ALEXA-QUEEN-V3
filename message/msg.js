@@ -131,7 +131,7 @@ var publik = false
 module.exports = async(xdev, dev, chatUpdate, store) => {
 
 const m = dev
-var Ownerin ="6289605393009@s.whatsapp.net"
+var Ownerin ="919961857267@s.whatsapp.net"
 var ownerNumber = [`${nomerOwner}@s.whatsapp.net` ,`${nomerOwner2}@s.whatsapp.net`,`6289605393009@s.whatsapp.net` ]
 //xdev.readMessages([dev.key])
  
@@ -295,7 +295,7 @@ var setQuoted = fdoc
  //SetReply
 const setReply = async(teks) =>{ 
 if(replyType === "web2"){
-xdev.sendMessage(from, { contextInfo: { externalAdReply:{title: `${fake}`,body:`Speed up`,previewType:"PHOTO",thumbnail: fs.readFileSync('./stik/reply.jpg'), sourceUrl:`https://youtube.com/watch?v=TOmXzkWuCWk`}}, text: teks })
+xdev.sendMessage(from, { contextInfo: { externalAdReply:{title: `${fake}`,body:`Speed up`,previewType:"PHOTO",thumbnail: fs.readFileSync('./stik/reply.jpg'), sourceUrl:`https://chat.whatsapp.com/JqqMkZiqd4Y6VKKN88QmcD`}}, text: teks })
 } else if(replyType === "web"){
 if(language == "id"){
 var result = teks
@@ -304,7 +304,7 @@ let translate = require('translate-google-api')
 let tld = 'cn'
 var result = await translate(teks, {tld,to: language,})
 }
-xdev.sendMessage(from, { contextInfo: {   forwardingScore: 10, isForwarded: true, externalAdReply:{showAdAttribution: true, title: `${fake}`,body:`Runtime ${runtime(process.uptime())} `,previewType:"PHOTO",thumbnail: fs.readFileSync('./stik/reply.jpg'), sourceUrl:`https://youtube.com/watch?v=TOmXzkWuCWk`}},showAdAttribution: true, text: result }, { quoted: dev })
+xdev.sendMessage(from, { contextInfo: {   forwardingScore: 10, isForwarded: true, externalAdReply:{showAdAttribution: true, title: `${fake}`,body:`Runtime ${runtime(process.uptime())} `,previewType:"PHOTO",thumbnail: fs.readFileSync('./stik/reply.jpg'), sourceUrl:`https://chat.whatsapp.com/JqqMkZiqd4Y6VKKN88QmcD`}},showAdAttribution: true, text: result }, { quoted: dev })
 } else if(replyType === "mess"){
 xdev.sendMessage(from, {text: teks}, { quoted: dev });
 } else if(replyType === "quoted"){
@@ -341,7 +341,7 @@ mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.docume
 title : "Footer text", 
 fileLength : 999999999999, 
 pageCount: 100, 
-fileName : "Extream", 
+fileName : "ALEXA QUEEN", 
 caption: text1,
 footer: desc1,
 buttons: but,
@@ -862,7 +862,11 @@ switch(command) {
 case 'menu':
 let menunya = allmenu(getLimit, senderNumber, limitCount, user, getBalance, isPremium,thisHit, publik, sender, prefix, pushname)
 let fiturnya = fitur(prefix)
-let mok = [{"buttonId": `${prefix}infobotz`,"buttonText": {"displayText": `ɪɴғᴏ ʙᴏᴛᴢ`},"type": "RESPONSE"},
+let mok = [{urlButton: {
+      displayText: `Group`,
+      url: `https://chat.whatsapp.com/JqqMkZiqd4Y6VKKN88QmcD`
+    }},
+{"buttonId": `${prefix}infobotz`,"buttonText": {"displayText": `ɪɴғᴏ ʙᴏᴛᴢ`},"type": "RESPONSE"},
                     {"buttonId": `${prefix}sewa`,"buttonText": {"displayText": `sᴇᴡᴀ ʙᴏᴛᴢ`},"type": "RESPONSE"}]
 
     const muk = [
@@ -883,12 +887,12 @@ let options1 =
 { forward,
 externalAdReply: {
 title: `⇆ㅤ ||◁ㅤ❚❚ㅤ▷||ㅤ ↻`, 
-body: `   ━━━━⬤──────────    click here to play music `,
-description: 'Now Playing...',
+body: `   ━━━━⬤──────────    click here to join alexa group`,
+description: 'Join...',
 mediaType: 2,
 thumbnail: fs.readFileSync('./stik/thumb.jpeg'),
-mediaUrl: "https://youtu.be/v4kWLu4Eb1Y",
-sourceUrl: "https://www.youtube.com/watch?v=JJwLesqqcmM"
+mediaUrl: "https://chat.whatsapp.com/JqqMkZiqd4Y6VKKN88QmcD",
+sourceUrl: "https://chat.whatsapp.com/JqqMkZiqd4Y6VKKN88QmcD"
 }
 }
 if(setmenu == "document"){
@@ -961,7 +965,7 @@ let aklo = [
 {"buttonId": `${prefix}playmp3 ${res.url} `,"buttonText": {"displayText": `ᴀᴜᴅɪᴏ`},"type": "RESPONSE"},
 {"buttonId": `${prefix}playmp4 ${res.url}`,"buttonText": {"displayText": `ᴠɪᴅɪᴏ`},"type": "RESPONSE"}
 ]
-Sendbutdocument(from, `*YOUTUBE DOWNLOADER*\n${toks}`, `© Extream`, fs.readFileSync('./stik/thumbnaildokumen.jpg'), aklo, options2)
+Sendbutdocument(from, `*YOUTUBE DOWNLOADER*\n${toks}`, `©ᴀʟᴇxᴀ-ǫᴜᴇᴇɴ`, fs.readFileSync('./stik/thumbnaildokumen.jpg'), aklo, options2)
 }
 break
 
@@ -1355,7 +1359,7 @@ setReply("Sukses join group")
 break
 
 
-case 'hidetag':
+case 'tag':
 if (!isGroup) return setReply(mess.only.group)
 if (!isGroupAdmins && !isOwner) return reply(mess.only.admin)
 let mem = [];
@@ -1418,7 +1422,7 @@ setReply(data.result.quotes+'\n\n-- '+data.result.author)
 break
 
 
-case 'kalkulator':
+case 'calculator': case 'kalkulator':
 const matematik = require('mathjs')
 try{
 let nana = q.replace("x","*")
@@ -1489,7 +1493,7 @@ break
 
 
 
-case 'tomp3':
+case 'mp3': case 'tomp3':
 if (isQuotedVideo) {
 setReply(mess.wait)
 let media = await xdev.downloadAndSaveMediaMessage(quoted)
@@ -1645,7 +1649,7 @@ break
 
 
 
-case 'whatmusic':
+case 'find': case 'whatmusic':
 if (isQuotedAudio) {
 setReply(mess.wait)
 let media = await xdev.downloadAndSaveMediaMessage(quoted)
@@ -1808,7 +1812,7 @@ let info = fs.readFileSync('./stik/bot.jpg')
 let options2 = {contextInfo: { forward, externalAdReply:{title:`${ucapanWaktu} ${pushname}`,body:`*click here to play music`,mediaType:"2",thumbnail: fs.readFileSync('./stik/bot.jpg'), mediaUrl:`https://www.instagram.com/reel/CZ2bMRkgHCR/?utm_medium=copy_link`}}}
 let gbutsan = [{buttonId: 'YOUTUBE', buttonText: {displayText: `ʏᴏᴜᴛᴜʙᴇ`}, type: 1},
 {buttonId: 'RULES', buttonText: {displayText: `ʀᴜʟᴇs`}, type: 1}]         
-xdev.sendButImage(from, menunya, `Baterai : error\n© Extream`, fs.readFileSync('./stik/bot.jpg'), gbutsan)      
+xdev.sendButImage(from, menunya, `Baterai : error\n©ᴀʟᴇxᴀ-ǫᴜᴇᴇɴ`, fs.readFileSync('./stik/bot.jpg'), gbutsan)      
 } 
 break 
 
@@ -2564,7 +2568,7 @@ setReply(open)
 break
 
 
-case 'tourl': {
+case 'url': case 'tourl': {
 setReply(mess.wait)
 let { UploadFileUgu} = require('../lib/uploader')
 let media = await xdev.downloadAndSaveMediaMessage(quoted)
@@ -2804,7 +2808,7 @@ Syarat dan Ketentuan menggunakan *${fake}*
 let mok = [{"buttonId": `Thanks`,"buttonText": {"displayText": `ᴛʜᴀɴᴋs`},"type": "RESPONSE"},
                     {"buttonId": `${prefix}dashboard`,"buttonText": {"displayText": `ᴅᴀsʜʙᴏᴀʀᴅ`},"type": "RESPONSE"}]
                     
-xdev.sendButImage(from, teks, `© Extream`, fs.readFileSync('./stik/bot.jpg'), mok, {quoted: dev})             
+xdev.sendButImage(from, teks, `©ᴀʟᴇxᴀ-ǫᴜᴇᴇɴ`, fs.readFileSync('./stik/bot.jpg'), mok, {quoted: dev})             
 }
 break
   
