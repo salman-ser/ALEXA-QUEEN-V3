@@ -1,7 +1,7 @@
 
 exports.dada = (prefix, pushname, ucapanWaktu) => {
-return `${ucapanWaktu} kak ${pushname}
-Berikut adalah list harga untuk Alexa queen
+return `${ucapanWaktu} hey ${pushname}
+Here is the price list for Alexa queen
 
 *╭─▸*「 𝗟𝗜𝗦𝗧 𝗔𝗟𝗘𝗫𝗔 」
 *┴*
@@ -21,13 +21,13 @@ Berikut adalah list harga untuk Alexa queen
 
 *╭─▸*「𝑳𝒊𝒏𝒌 𝑮𝒓𝒖𝒑 𝑩𝒐𝒕 𝑾𝒉𝒂𝒕𝒔𝑨𝒑𝒑」
 *│▸*
-*│▸* https://bit.ly/3Hyo7A4
+*│▸* https://github.com/Diegoson/ALEXA-QUEEN-V3
 *╰─────────────༺ ˎˊ*
 
 𝗡𝗢𝗧𝗘 : 
 
-Bot on 24 jam.
-Kalo mau alexa bisa chat
+Bot on 24 hours.
+If you want Alexa, you can chat
 
 http://wa.me/+27686881509
 `
