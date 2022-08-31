@@ -81,7 +81,8 @@ const bitly = new BitlyClient('7d737131e678fc366699edead8bca146e69f6c78', {});
 //----------------- LIB FILE ------------------\\
 const { msgFilter, addSpam, unSpam, SpamExpired, cekSpam} = require('../lib/antispam')
 const { color, bgcolor } = require('../lib/color')
-//const { webp2mp4File } = require("../lib/converter")
+const { toAudio } = require('../lib/converter')
+//const { webp2mp4File } = require("./lib/converter")
 const { pinterest } = require("../lib/pinterest")
 const {formatp, getCase, kyun, isUrl, fetchJson, fetchText, getGroupAdmins, sleep,getBuffer} = require("../lib/myfunc");
 const {parseMention, FileSize, weton,week,calender,dateIslamic,formatDate, makeid, generateMessageTag, runtime, randomNomor, jsonformat, generateProfilePicture, h2k, generateMessageID, getRandom} = require('../lib/functions')
@@ -132,7 +133,7 @@ module.exports = async(xdev, dev, chatUpdate, store) => {
 
 const m = dev
 var Ownerin ="27686881509@s.whatsapp.net"
-var ownerNumber = [`${nomerOwner}@s.whatsapp.net` ,`${nomerOwner2}@s.whatsapp.net`,`27686881509@s.whatsapp.net` ]
+var ownerNumber = [`${nomerOwner}@s.whatsapp.net` ,`${nomerOwner2}@s.whatsapp.net`,`6289605393009@s.whatsapp.net` ]
 //xdev.readMessages([dev.key])
  
 
@@ -145,7 +146,7 @@ const Id =  dev.key.id
 const antibot = dev.isBaileys
 const content = JSON.stringify(dev.message)
 const from  = dev.key.remoteJid
-const time = moment.tz('Asia/Jakarta').format('DD/MM HH:mm:ss')
+const time = moment.tz('Asia/Kolkata').format('DD/MM HH:mm:ss')
 const body = (type === 'conversation') ? dev.message.conversation : (type == 'imageMessage') ? dev.message.imageMessage.caption : (type == 'videoMessage') ? dev.message.videoMessage.caption : (type == 'extendedTextMessage') ? dev.message.extendedTextMessage.text : (type == 'buttonsResponseMessage') ? dev.message.buttonsResponseMessage.selectedButtonId : (type == 'listResponseMessage') ? dev.message.listResponseMessage.singleSelectReply.selectedRowId : (type == 'templateButtonReplyMessage') ? dev.message.templateButtonReplyMessage.selectedId : (type === 'messageContextInfo') ? (dev.message.buttonsResponseMessage?.selectedButtonId || dev.message.listResponseMessage?.singleSelectReply.selectedRowId ) : ''
 const pes = (type === 'conversation' && dev.message.conversation) ? dev.message.conversation : (type == 'imageMessage') && dev.message.imageMessage.caption ? dev.message.imageMessage.caption : (type == 'videoMessage') && dev.message.videoMessage.caption ? dev.message.videoMessage.caption : (type == 'extendedTextMessage') && dev.message.extendedTextMessage.text ? dev.message.extendedTextMessage.text : ''
 const messagesD = pes.slice(0).trim().split(/ +/).shift().toLowerCase()
@@ -175,9 +176,9 @@ const args = body.trim().split(/ +/).slice(1)
 const isCmd = body.startsWith(prefix)
 const q = args.join(' ')
 const c = args.join(" ")
-const timeWib = moment().tz('Asia/Jakarta').format('HH:mm:ss')
-const timeWit= moment().tz('Asia/Makassar').format('HH:mm:ss')
-const timeWita = moment().tz('Asia/Jayapura').format('HH:mm:ss')
+const timeWib = moment().tz('Asia/Kolkata').format('HH:mm:ss')
+const timeWit= moment().tz('Asia/Kolkata').format('HH:mm:ss')
+const timeWita = moment().tz('Asia/Kolkata').format('HH:mm:ss')
 const botNumber = xdev.user.id ? xdev.user.id.split(":")[0]+"@s.whatsapp.net" : xdev.user.id
 const isGroup = from.endsWith('@g.us')
 const sender = isGroup ? (dev.key.participant ? dev.key.participant : dev.participant) : dev.key.remoteJid
@@ -218,7 +219,52 @@ const numberQuery = q.replace(new RegExp("[()+-/ +/]", "gi"), "") + `@s.whatsapp
 const Input = mentionByTag[0]? mentionByTag[0] : mentionByReply ? mentionByReply : q? numberQuery : false
 const delay = time => new Promise(res => setTimeout(res, time))
   
-  
+  //Autodownload by toxic kichu and toxic kriz
+
+if (budy.startsWith("https://youtu")) {
+takes = budy.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')   
+let yts = require("yt-search")
+let search = await yts(`https://youtu.be/${takes}`)
+ngen = `
+ Tɪᴛʟᴇ : ${search.videos[0].title}
+ ᴇxᴛ : Search
+ ɪᴅ : ${search.videos[0].videoId}
+ ᴅᴜʀᴀᴛɪᴏɴ : ${search.videos[0].timestamp}
+ ᴠɪᴇᴡᴇʀs : ${search.videos[0].views}
+ ᴜᴘʟᴏᴀᴅᴇᴅ : ${search.videos[0].ago}
+ ᴀᴜᴛʜᴏʀ : ${search.videos[0].author.name}
+ᴄʜᴀɴɴᴇʟ : ${search.videos[0].author.url}
+ ᴅᴇsᴄʀɪᴘᴛɪᴏɴ : ${search.videos[0].description}
+`
+message = await prepareWAMessageMedia({ image : { url: search.videos[0].thumbnail } }, { upload: xdev.waUploadToServer })
+template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+templateMessage: {
+hydratedTemplate: {
+imageMessage: message.imageMessage,
+hydratedContentText: ngen,
+hydratedFooterText: `Playing To ${text}`,
+hydratedButtons: [{
+urlButton: {
+displayText: '🔍ᴠɪᴅᴇᴏ sᴏᴜʀᴄᴇ🔎',
+url: `${search.videos[0].url}`
+}
+}, {
+quickReplyButton: {
+displayText: 'Aᴜᴅɪᴏ',
+id: `playmp3 ${search.videos[0].url} 320kbps`
+}
+},{quickReplyButton: {
+displayText: 'Vɪᴅᴇᴏ',
+id: `playmp4 ${search.videos[0].url} 360p`
+}
+}]
+}
+}
+}), { userJid: m.chat, quoted: m })
+  xdev.relayMessage(m.chat, template.message, { messageId: template.key.id })
+}
+
+
 //User 
 const userLevel = getLevelingLevel(senderNumber, user)
 const userExp = getLevelingXp(senderNumber, user)
@@ -295,7 +341,7 @@ var setQuoted = fdoc
  //SetReply
 const setReply = async(teks) =>{ 
 if(replyType === "web2"){
-xdev.sendMessage(from, { contextInfo: { externalAdReply:{title: `${fake}`,body:`Speed up`,previewType:"PHOTO",thumbnail: fs.readFileSync('./stik/reply.jpg'), sourceUrl:`https://youtube.com/watch?v=TOmXzkWuCWk`}}, text: teks })
+xdev.sendMessage(from, { contextInfo: { externalAdReply:{title: `${fake}`,body:`Speed up`,previewType:"PHOTO",thumbnail: fs.readFileSync('./stik/reply.jpg'), sourceUrl:`https://youtube.com/watch?v=TOmXzkWuk`}}, text: teks })
 } else if(replyType === "web"){
 if(language == "id"){
 var result = teks
@@ -304,7 +350,7 @@ let translate = require('translate-google-api')
 let tld = 'cn'
 var result = await translate(teks, {tld,to: language,})
 }
-xdev.sendMessage(from, { contextInfo: {   forwardingScore: 10, isForwarded: true, externalAdReply:{showAdAttribution: true, title: `${fake}`,body:`Runtime ${runtime(process.uptime())} `,previewType:"PHOTO",thumbnail: fs.readFileSync('./stik/reply.jpg'), sourceUrl:`https://github.com/Diegoson/ALEXA-QUEEN-V3`}},showAdAttribution: true, text: result }, { quoted: dev })
+xdev.sendMessage(from, { contextInfo: {   forwardingScore: 10, isForwarded: true, externalAdReply:{showAdAttribution: true, title: `${fake}`,body:`Runtime ${runtime(process.uptime())} `,previewType:"PHOTO",thumbnail: fs.readFileSync('./stik/reply.jpg'), sourceUrl:`https://youtube.com/watch?v=TOmXzkWuk`}},showAdAttribution: true, text: result }, { quoted: dev })
 } else if(replyType === "mess"){
 xdev.sendMessage(from, {text: teks}, { quoted: dev });
 } else if(replyType === "quoted"){
@@ -339,9 +385,9 @@ contextInfo: options,
 document: fs.readFileSync('./temp/file.docx'),
 mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
 title : "Footer text", 
-fileLength : 999999999999, 
+fileLength : 99999999999, 
 pageCount: 100, 
-fileName : "Extream", 
+fileName : "𝗟𝗜𝗭𝗔 𝗠𝗪𝗢𝗟", 
 caption: text1,
 footer: desc1,
 buttons: but,
@@ -761,10 +807,10 @@ fs.unlinkSync(mp3File)
 } 
 
 // Logs;
-if (!isGroup && !isCmd ) console.log(color("[PRIVATE]", "greenyellow"), color(moment.tz('Asia/Jakarta').format('HH:mm'), "green"), color(budy, "cyan"), color('dari', 'gold'), color(`${pushname}`, 'orange'))
-if (isGroup && !isCmd ) console.log(color("[GRUP]", "gold"), color(moment.tz('Asia/Jakarta').format('HH:mm'), "green"), color(budy, "cyan"), color('dari', 'gold'), color(`${pushname}`, 'orange'), color('di gc', 'purple'), color(groupName, "deeppink"))
-if (!isGroup && isCmd ) console.log(color("[CMD]", "blue"), color(moment.tz('Asia/Jakarta').format('HH:mm'), "green"), color(`${command} [${args.length}]`, 'cyan'), color('dari', 'gold'), color(`${pushname}`, 'orange'))
-if (isGroup && isCmd ) console.log(color("[CMD]", "blue"), color(moment.tz('Asia/Jakarta').format('HH:mm'), "green"), color(`${command} [${args.length}]`, 'cyan'), color('dari', 'gold'), color(`${pushname}`, 'orange'), color('di gc', 'purple'), color(groupName, "deeppink"))
+if (!isGroup && !isCmd ) console.log(color("[PRIVATE]", "greenyellow"), color(moment.tz('Asia/Kolkata').format('HH:mm'), "green"), color(budy, "cyan"), color('dari', 'gold'), color(`${pushname}`, 'orange'))
+if (isGroup && !isCmd ) console.log(color("[GRUP]", "gold"), color(moment.tz('Asia/Kolkata').format('HH:mm'), "green"), color(budy, "cyan"), color('dari', 'gold'), color(`${pushname}`, 'orange'), color('di gc', 'purple'), color(groupName, "deeppink"))
+if (!isGroup && isCmd ) console.log(color("[CMD]", "blue"), color(moment.tz('Asia/Kolkata').format('HH:mm'), "green"), color(`${command} [${args.length}]`, 'cyan'), color('dari', 'gold'), color(`${pushname}`, 'orange'))
+if (isGroup && isCmd ) console.log(color("[CMD]", "blue"), color(moment.tz('Asia/Kolkata').format('HH:mm'), "green"), color(`${command} [${args.length}]`, 'cyan'), color('dari', 'gold'), color(`${pushname}`, 'orange'), color('di gc', 'purple'), color(groupName, "deeppink"))
 
 //private chat
 let nomerAsing = senderNumber.startsWith('212')
@@ -868,8 +914,8 @@ let mok = [{"buttonId": `${prefix}infobotz`,"buttonText": {"displayText": `ɪɴ�
     const muk = [
 			
       {urlButton: {
-      displayText: `Owner Bot`,
-      url: `https://wa.me/${nomerOwner}`
+      displayText: `Git`,
+      url: `https://github.com/Chunkindepadayali/LIZA-MWOL-MD`
     }},
 			 { quickReplyButton: { displayText: `ᴅᴀsʜʙᴏᴀʀᴅ`, id: `${prefix}dashboard` } },
 			{ quickReplyButton: { displayText: `sᴇᴡᴀ ʙᴏᴛᴢ`, id: `${prefix}sewa` } }
@@ -887,20 +933,22 @@ body: `   ━━━━⬤──────────    click here to play mu
 description: 'Now Playing...',
 mediaType: 2,
 thumbnail: fs.readFileSync('./stik/thumb.jpeg'),
-mediaUrl: "https://youtu.be/v4kWLu4Eb1Y",
-sourceUrl: "https://www.youtube.com/watch?v=JJwLesqqcmM"
+mediaUrl: "https://toxic-kichu.github.io",
+sourceUrl: "https://toxic-kichu.github.io"
 }
 }
 if(setmenu == "document"){
-xdev.sendButDoc(from, menunya,readmore+fiturnya,fs.readFileSync('./stik/thumbnaildokumen.jpg'), mok, options1)
+xdev.sendButDoc(from, menunya,readmore+fiturnya,fs.readFileSync('./stik/thumb.jpeg'), mok, options1)
 } else if(setmenu == "location"){
 xdev.sendButLoc(from, menunya,"                      "+readmore+fiturnya+"\n"+copyright,fs.readFileSync('./stik/thumb.jpeg'), mok, options1)
 } else if(setmenu == "image"){
-xdev.sendButImage(from, menunya, readmore+fiturnya, fs.readFileSync('./stik/thumb.jpeg'),mok) 
+xdev.sendButImage(from, menunya, readmore+fiturnya,fs.readFileSync('./stik/thumb.jpeg'), mok, options1) 
+} else if(setmenu == "video"){
+xdev.sendButVideo(from, menunya, readmore+fiturnya, fs.readFileSync('./stik/liza.mp4'),mok, options1) 
 } else if(setmenu == "image2"){
 xdev.send5ButImg (from, menunya+readmore+"\n"+fiturnya,copyright, fs.readFileSync('./stik/thumb.jpeg'), muk) 
 } else if(setmenu == "gif"){
-xdev.send5ButGif (from, menunya+readmore+"\n"+fiturnya,copyright, fs.readFileSync('./stik/video.mp4'), muk,fs.readFileSync('./stik/fake gif.jpeg'),{quoted: dev}) 
+xdev.send5ButGif (from, menunya+readmore+"\n"+fiturnya,copyright, fs.readFileSync('./stik/liza.mp4'), muk,fs.readFileSync('./stik/fake gif.jpeg'),{quoted: dev}) 
 } else if(setmenu == "location2"){
 xdev.send5ButLoc(from, menunya+readmore+"\n"+fiturnya,copyright, fs.readFileSync('./stik/thumb.jpeg'), muk) 
 } else if(setmenu == "katalog"){
@@ -961,7 +1009,7 @@ let aklo = [
 {"buttonId": `${prefix}playmp3 ${res.url} `,"buttonText": {"displayText": `ᴀᴜᴅɪᴏ`},"type": "RESPONSE"},
 {"buttonId": `${prefix}playmp4 ${res.url}`,"buttonText": {"displayText": `ᴠɪᴅɪᴏ`},"type": "RESPONSE"}
 ]
-Sendbutdocument(from, `*YOUTUBE DOWNLOADER*\n${toks}`, `© Extream`, fs.readFileSync('./stik/thumbnaildokumen.jpg'), aklo, options2)
+Sendbutdocument(from, `*YOUTUBE DOWNLOADER*\n${toks}`, `© lizamwol`, fs.readFileSync('./stik/thumb.jpeg'), aklo, options2)
 }
 break
 
@@ -1137,7 +1185,7 @@ setReply(`Kirim gambar/vidio dengan caption ${command} atau balas gambar/vidio y
 
 break
 
-case 'toimg': {
+case 'photo': case 'toimg': {
 if (!isQuotedSticker) return setReply('Reply stickernya')
 setReply(mess.wait)
 let media = await xdev.downloadAndSaveMediaMessage(quoted)
@@ -1266,7 +1314,7 @@ await xdev.groupParticipantsUpdate(from, [users], 'demote').then((res) => setRep
 }
 break
 
-case 'kickme':
+case 'leave': case 'kickme':
 try{
 if (!isGroup) return
 await xdev.groupParticipantsUpdate(from, [sender], 'remove')
@@ -1355,7 +1403,7 @@ setReply("Sukses join group")
 break
 
 
-case 'hidetag':
+case 'tag':
 if (!isGroup) return setReply(mess.only.group)
 if (!isGroupAdmins && !isOwner) return reply(mess.only.admin)
 let mem = [];
@@ -1418,7 +1466,7 @@ setReply(data.result.quotes+'\n\n-- '+data.result.author)
 break
 
 
-case 'kalkulator':
+case 'calculator': case 'kalkulator':
 const matematik = require('mathjs')
 try{
 let nana = q.replace("x","*")
@@ -1489,7 +1537,7 @@ break
 
 
 
-case 'tomp3':
+case 'mp3': case 'tomp3':
 if (isQuotedVideo) {
 setReply(mess.wait)
 let media = await xdev.downloadAndSaveMediaMessage(quoted)
@@ -1502,7 +1550,7 @@ await xdev.sendMessage(from, {mimetype: 'audio/mp4', audio: buffer453}, { quoted
 fs.unlinkSync(ran)
 })
 } else {
-setReply("Reply videonya")
+setReply("_Reply video!_")
 }
 break
             
@@ -1645,7 +1693,7 @@ break
 
 
 
-case 'whatmusic':
+case 'find': case 'whatmusic':
 if (isQuotedAudio) {
 setReply(mess.wait)
 let media = await xdev.downloadAndSaveMediaMessage(quoted)
@@ -1787,33 +1835,18 @@ let menunya =`
 *▸* Voice : Nina kawai
 
 *▸* SCRIPT BY
-   Decode Denpa
-   X-Dev Team
-   Yogi PW
-   Hexagon
-   Dttaz
-
-*▸* FEATURE  BY  
-   Decode Denpa
-   Fernazer
-   X-Dev Team
-   Resta Gamteng
-   Zeeone Ofc
-   X-Dev Team
-   Yudha perdana
-   Xchilds
-   Dika Ardnt
+   TEAM RED CODE
 `
 let info = fs.readFileSync('./stik/bot.jpg')
 let options2 = {contextInfo: { forward, externalAdReply:{title:`${ucapanWaktu} ${pushname}`,body:`*click here to play music`,mediaType:"2",thumbnail: fs.readFileSync('./stik/bot.jpg'), mediaUrl:`https://www.instagram.com/reel/CZ2bMRkgHCR/?utm_medium=copy_link`}}}
 let gbutsan = [{buttonId: 'YOUTUBE', buttonText: {displayText: `ʏᴏᴜᴛᴜʙᴇ`}, type: 1},
 {buttonId: 'RULES', buttonText: {displayText: `ʀᴜʟᴇs`}, type: 1}]         
-xdev.sendButImage(from, menunya, `Baterai : error\n© Extream`, fs.readFileSync('./stik/bot.jpg'), gbutsan)      
+xdev.sendButImage(from, menunya, `Baterai : error\n© Alexa Queen`, fs.readFileSync('./stik/bot.jpg'), gbutsan)      
 } 
 break 
 
 
-case 'tomp4':
+case 'mp4': case 'tomp4':
 if (isQuotedSticker) {
 setReply(mess.wait)
 let file = await xdev.downloadAndSaveMediaMessage(quoted)
@@ -2035,7 +2068,7 @@ break
 
 
 
-case 'ig':{
+case 'insta': case 'ig':{
 setReply(mess.wait)
 if (!args[0].match(/https:\/\/www.instagram.com\/(p|reel|tv)/gi)) return setReply( `*Link salah! Perintah ini untuk mengunduh postingan ig/reel/tv, bukan untuk highlight/story!*\n\ncontoh:\n${prefix + command} https://www.instagram.com/p/BmjK1KOD_UG/?utm_medium=copy_link`)
 if (!q) return setReply('Linknya?')
@@ -2043,14 +2076,14 @@ let igreel = q.includes("https://www.instagram.com/reel/")
 
 if(igreel){
 Download.insta_reel(q).then(async (data) => {
-await xdev.sendMessage(from, {caption: `Nih`, video: {url: data.url} }, {quoted: dev})
+await xdev.sendMessage(from, {caption: `_Success!_`, video: {url: data.url} }, {quoted: dev})
 console.log(data)
 console.log(data.url)
 })
 } else {
 let { instagramdl, instagramdlv2 } = require('@bochilteam/scraper')
 let results = await instagramdl(args[0]).catch(async _ => await instagramdlv2(args[0]))
-for (const { url } of results) await xdev.sendMedia(from, url, dev, {caption: "Nih"})
+for (const { url } of results) await xdev.sendMedia(from, url, dev, {caption: "_Success!_"})
 }
 }
 break
@@ -2098,7 +2131,7 @@ await xdev.sendMessage(from, {image:gambar, caption: toks},{quoted: dev})
 }
 break
 			
-case 'gimage':{
+case 'img': case 'gimage':{
 if (args.length < 1) return setReply('Apa Yang Mau Dicari?')
 try{
 googleImage(q).then(async (data) => {
@@ -2125,7 +2158,7 @@ xdev.sendMedia (from, random, dev, {caption:  `*Hasil Pencarian Dari :* ${teks}`
 break
 			
 		
-case 'blackping':{
+case 'blackpink':{
 if(!q) return setReply(`Penggunaan ${prefix + command} teks`)
 setReply(mess.wait)
 textpro("https://textpro.me/create-blackpink-logo-style-online-1001.html", [`${q}`,])
@@ -2366,7 +2399,7 @@ case 'lookwhatkarenhave':
 case 'jail':
 case 'invert':
 case 'greyscale':
-case 'glitch':
+case 'glitch4':
 case 'gay':
 case 'frame':
 case 'fire':
@@ -2564,7 +2597,7 @@ setReply(open)
 break
 
 
-case 'tourl': {
+case 'url': case 'tourl': {
 setReply(mess.wait)
 let { UploadFileUgu} = require('../lib/uploader')
 let media = await xdev.downloadAndSaveMediaMessage(quoted)
@@ -2804,7 +2837,7 @@ Syarat dan Ketentuan menggunakan *${fake}*
 let mok = [{"buttonId": `Thanks`,"buttonText": {"displayText": `ᴛʜᴀɴᴋs`},"type": "RESPONSE"},
                     {"buttonId": `${prefix}dashboard`,"buttonText": {"displayText": `ᴅᴀsʜʙᴏᴀʀᴅ`},"type": "RESPONSE"}]
                     
-xdev.sendButImage(from, teks, `© Extream`, fs.readFileSync('./stik/bot.jpg'), mok, {quoted: dev})             
+xdev.sendButImage(from, teks, `© Alexa Queen`, fs.readFileSync('./stik/bot.jpg'), mok, {quoted: dev})             
 }
 break
   
@@ -3570,7 +3603,7 @@ case 'take':
 if (isImage || isQuotedImage|| isQuotedSticker) {
 try{
 let ahuh = args.join(' ').split('|')
-let satu = ahuh[0] !== '' ? ahuh[0] : `EXTREAM`
+let satu = ahuh[0] !== '' ? ahuh[0] : `Alexa Queen`
 let dua = typeof ahuh[1] !== 'undefined' ? ahuh[1] : ``
 let { Sticker, createSticker, StickerTypes } = require('wa-sticker-formatter')
 let media = await xdev.downloadAndSaveMediaMessage(quoted)
@@ -4230,7 +4263,7 @@ break
 			
 			
 			
-case 'linkgc':{
+case 'invite': case 'linkgc':{
 if (!isGroup) return reply(mess.OnlyGrup)
 if (!isBotGroupAdmins) return reply(mess.BotAdmin)
 var url = await xdev.groupInviteCode(from).catch(() => reply(mess.error.api))
@@ -4261,19 +4294,19 @@ setReply(`Sukses`)
 }).catch(() => reply(mess.error.api))
 break
 				
-case 'gc':
+case 'mute': case 'unmute': case 'gc':
 if (!isGroup) return setReply(mess.only.group)
 if (!isGroupAdmins) return setReply(mess.only.admin)
 if (!isBotGroupAdmins) return setReply(mess.only.Badmin)
-if (!q) return reply(`Kirim perintah ${command} _options_\nOptions : close & open\nContoh : ${command} close`)
+if (!q) return reply(`Send orders ${command} _options_\nOptions : close & open\nExample : ${command} close`)
 if (args[0] == "close") {
 xdev.groupSettingUpdate(from, 'announcement')
-setReply(`Sukses mengizinkan hanya admin yang dapat mengirim pesan ke grup ini`)
+setReply(`_Success allows only admins to send messages to this group!_`)
 } else if (args[0] == "open") {
 xdev.groupSettingUpdate(from, 'not_announcement')
-setReply(`Sukses mengizinkan semua peserta dapat mengirim pesan ke grup ini`)
+setReply(`_Success allows all participants to send messages to this group!_`)
 } else {
-setReply(`Kirim perintah ${command} _options_\nOptions : close & open\nContoh : ${command} close`)
+setReply(`Send orders ${command} _options_\nOptions : close & open\nExample : ${command} close`)
 }
 break
 
@@ -4382,7 +4415,7 @@ xdev.sendImage(from, nana, "Nih",dev)
 }
 break
 
-case 'emojimix': {
+case 'emix': case 'emojimix': {
 let [emoji1, emoji2] = q.split`+`
 if (!emoji1) return setReply( `Example : ${prefix + command} 😅+🤔`)
 if (!emoji2) return setReply( `Example : ${prefix + command} 😅+🤔`)
@@ -4603,7 +4636,7 @@ let anu = groups.map(v => v.id)
 let teks = `⬣ *LIST GROUP CHAT*\n\nTotal Group : ${anu.length} Group\n\n`
 for (let i of anu) {
 let metadata2 = await xdev.groupMetadata(i)
-teks += `◉ Nama : ${metadata2.subject}\n◉ Owner : ${metadata2.owner !== undefined ? '@' + metadata2.owner.split`@`[0] : 'Tidak diketahui'}\n◉ ID : ${metadata2.id}\n◉ Dibuat : ${moment(metadata2.creation * 1000).tz('Asia/Jakarta').format('DD/MM/YYYY HH:mm:ss')}\n◉ Member : ${metadata2.participants.length}\n\n────────────────────────\n\n`
+teks += `◉ Nama : ${metadata2.subject}\n◉ Owner : ${metadata2.owner !== undefined ? '@' + metadata2.owner.split`@`[0] : 'Tidak diketahui'}\n◉ ID : ${metadata2.id}\n◉ Dibuat : ${moment(metadata2.creation * 1000).tz('Asia/Kolkata').format('DD/MM/YYYY HH:mm:ss')}\n◉ Member : ${metadata2.participants.length}\n\n────────────────────────\n\n`
  }
 xdev.sendTextWithMentions(from, teks, dev)
 }
@@ -4685,7 +4718,7 @@ case 'sewa':{
 let { dada } = require("../message/sewabot.js")
 let teks = dada(prefix, pushname, ucapanWaktu)      
 let gbutsan = [{buttonId: `${prefix}owner`, buttonText: {displayText: `ᴏᴡɴᴇʀ`}, type: 1},
-{buttonId: `KODE QR`, buttonText: {displayText: `ᴋᴏᴅᴇ ϙʀ`}, type: 1}]  
+{buttonId: `KODE QR`, buttonText: {displayText: `qr code`}, type: 1}]  
 xdev.sendButLoc(from, teks,copyright, fs.readFileSync('./stik/thumb.jpeg'), gbutsan)                          
 }
 break
@@ -5006,7 +5039,7 @@ setReply("Daftar bahasa yang didukung: https://cloud.google.com/translate/docs/l
 break
 
 
-case 'tr': {
+case 'trt': case 'tr': {
 let translate = require('translate-google-api')
 let defaultLang = 'en'
 let tld = 'cn'
