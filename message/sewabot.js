@@ -21,7 +21,7 @@ Here is the price list for Alexa queen
 
 *╭─▸*「𝑳𝒊𝒏𝒌 𝑮𝒓𝒖𝒑 𝑩𝒐𝒕 𝑾𝒉𝒂𝒕𝒔𝑨𝒑𝒑」
 *│▸*
-*│▸* https://github.com/Diegoson/ALEXA-QUEEN-V3
+*│▸* https://github.com/Diegoson
 *╰─────────────༺ ˎˊ*
 
 𝗡𝗢𝗧𝗘 : 
