@@ -914,8 +914,8 @@ let mok = [{"buttonId": `${prefix}infobotz`,"buttonText": {"displayText": `ɪɴ�
     const muk = [
 			
       {urlButton: {
-      displayText: `Git`,
-      url: `https://github.com/Chunkindepadayali/LIZA-MWOL-MD`
+      displayText: `ɢɪᴛʜᴜʙ`,
+      url: `https://github.com/Diegoson/ALEXA-QUEEN-V3`
     }},
 			 { quickReplyButton: { displayText: `ᴅᴀsʜʙᴏᴀʀᴅ`, id: `${prefix}dashboard` } },
 			{ quickReplyButton: { displayText: `sᴇᴡᴀ ʙᴏᴛᴢ`, id: `${prefix}sewa` } }
@@ -934,7 +934,7 @@ description: 'Now Playing...',
 mediaType: 2,
 thumbnail: fs.readFileSync('./stik/thumb.jpeg'),
 mediaUrl: "https://toxic-kichu.github.io",
-sourceUrl: "https://toxic-kichu.github.io"
+sourceUrl: "https://Youtube.c/CYBERXKID"
 }
 }
 if(setmenu == "document"){
