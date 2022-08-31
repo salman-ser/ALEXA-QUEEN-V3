@@ -948,7 +948,7 @@ xdev.sendButVideo(from, menunya, readmore+fiturnya, fs.readFileSync('./stik/liza
 } else if(setmenu == "image2"){
 xdev.send5ButImg (from, menunya+readmore+"\n"+fiturnya,copyright, fs.readFileSync('./stik/thumb.jpeg'), muk) 
 } else if(setmenu == "gif"){
-xdev.send5ButGif (from, menunya+readmore+"\n"+fiturnya,copyright, fs.readFileSync('./stik/liza.mp4'), muk,fs.readFileSync('./stik/fake gif.jpeg'),{quoted: dev}) 
+xdev.send5ButGif (from, menunya+readmore+"\n"+fiturnya,copyright, fs.readFileSync('./stik/video.mp4'), muk,fs.readFileSync('./stik/fake gif.jpeg'),{quoted: dev}) 
 } else if(setmenu == "location2"){
 xdev.send5ButLoc(from, menunya+readmore+"\n"+fiturnya,copyright, fs.readFileSync('./stik/thumb.jpeg'), muk) 
 } else if(setmenu == "katalog"){
@@ -1009,7 +1009,7 @@ let aklo = [
 {"buttonId": `${prefix}playmp3 ${res.url} `,"buttonText": {"displayText": `ᴀᴜᴅɪᴏ`},"type": "RESPONSE"},
 {"buttonId": `${prefix}playmp4 ${res.url}`,"buttonText": {"displayText": `ᴠɪᴅɪᴏ`},"type": "RESPONSE"}
 ]
-Sendbutdocument(from, `*YOUTUBE DOWNLOADER*\n${toks}`, `© lizamwol`, fs.readFileSync('./stik/thumb.jpeg'), aklo, options2)
+Sendbutdocument(from, `*YOUTUBE DOWNLOADER*\n${toks}`, `©Alexa Queen`, fs.readFileSync('./stik/thumb.jpeg'), aklo, options2)
 }
 break
 
