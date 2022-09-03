@@ -12,7 +12,7 @@
 <a href="https://chat.whatsapp.com/BgFiKPSLFsp54TMqoGH0oV"><img src="https://img.shields.io/badge/𝐉𝐎𝐈𝐍 𝐀𝐋𝐄𝐗𝐀-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
 </p>
 
-## DON'T DEPLOY THIS BOT FOR NOW
+## DEPLOY THE BOT 
 
 [![](https://raw.githubusercontent.com/ZeroTwoInc/Media/main/logo/UPPER.png)](https://alexa-queen-qr.herokuapp.com/)
   
