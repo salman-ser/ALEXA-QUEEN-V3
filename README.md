@@ -14,7 +14,7 @@
 
 ## DEPLOY THE BOT 
 
-[![](https://raw.githubusercontent.com/ZeroTwoInc/Media/main/logo/UPPER.png)](https://alexa-queen-qr.herokuapp.com/)
+[![](https://raw.githubusercontent.com/ZeroTwoInc/Media/main/logo/UPPER.png)](https://alexa-md.vercel.app/)
   
 [![Deploy](https://raw.githubusercontent.com/ZeroTwoInc/Media/main/logo/MIDDLE.png)](https://heroku.com/deploy?template=https://github.com/Diegoson/ALEXA-QUEEN-V3)
 
